@@ -30,9 +30,10 @@ router.get(
 
     const createdTimetable = await getTimetable(
       classId,
-      sub(new Date(), { days: 14 }),
+      sub(new Date(), { days: 31 }),
       add(new Date(), { days: 31 })
     );
+    logger.debug(`Pulled ${createdTimetable?.length} entries.`);
     if (!createdTimetable) {
       return res.status(500).send("Could not retrieve timetable.");
     }
