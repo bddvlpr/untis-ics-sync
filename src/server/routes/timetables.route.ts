@@ -18,7 +18,7 @@ router.get(
       return res.status(400).json({ errors: errors.array() });
     }
     const classId = req.params.classId;
-    const retrievedTimetable = await redis.get(classId);
+    const retrievedTimetable = await redis.get(`timetables.${classId}`);
 
     if (retrievedTimetable) {
       res.status(200).send(retrievedTimetable);
@@ -67,7 +67,7 @@ const getTimetable = async (
 };
 
 const saveTimetable = async (classId: number, events: string) => {
-  redis.set(String(classId), events, {
+  redis.set(`timetables.${String(classId)}`, events, {
     EX: Number(process.env.CACHE_EXPIRE_TIME) || 3600,
   });
 };
