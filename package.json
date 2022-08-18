@@ -1,6 +1,6 @@
 {
   "name": "units-ics-sync",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Serves a calendar API (ICS) for events provided from Untis.",
   "main": "src/index.ts",
   "repository": "https://github.com/bddvlpr/untis-ics-sync.git",
