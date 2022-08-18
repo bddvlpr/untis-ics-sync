@@ -1,5 +1,12 @@
 services:
   server:
     build: .
+    env_file:
+      - .env
     ports:
       - "3000:3000"
+    restart: unless-stopped
+  redis:
+    image: redis:alpine
+    command: redis-server,
+    restart: unless-stopped
