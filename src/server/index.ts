@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import logger from "./logger";
 import classesRoute from "./routes/classes.route";
+import healthRoute from "./routes/health.route";
 import timetablesRoute from "./routes/timetables.route";
 
 const createServer = (port: number) => {
@@ -14,6 +15,7 @@ const createServer = (port: number) => {
   });
   app.use("/classes", classesRoute);
   app.use("/timetables", timetablesRoute);
+  app.use("/health", healthRoute);
 
   const server = app.listen(port, () => {
     logger.info(`Server listening on port ${port}`);
