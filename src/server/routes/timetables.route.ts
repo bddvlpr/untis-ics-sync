@@ -1,8 +1,9 @@
 import { add, sub } from "date-fns";
 import { Router } from "express";
-import { param, validationResult } from "express-validator";
+import { param, query, validationResult } from "express-validator";
 import { createEvents } from "ics";
-import { convertLessonToEvent } from "../../utils/time";
+import { Lesson } from "webuntis";
+import { convertLessonToEvent, FormatOptions } from "../../utils/time";
 import logger from "../logger";
 import redis from "../redis";
 import untis from "../untis";
@@ -12,16 +13,26 @@ const router = Router();
 router.get(
   "/:classId",
   param("classId").isNumeric().exists(),
+  query("options").isJSON().optional(),
   async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty() || !req.params) {
+    if (!errors.isEmpty() || !req.params || !req.query) {
       return res.status(400).json({ errors: errors.array() });
     }
     const classId = req.params.classId;
     const retrievedTimetable = await redis.get(`timetables.${classId}`);
 
     if (retrievedTimetable) {
-      res.status(200).send(retrievedTimetable);
+      res
+        .status(200)
+        .send(
+          createCalendar(
+            JSON.parse(retrievedTimetable),
+            req.query.options
+              ? (JSON.parse(req.query.options) as FormatOptions)
+              : undefined
+          )
+        );
       return;
     }
     logger.info(
@@ -37,15 +48,28 @@ router.get(
     if (!createdTimetable) {
       return res.status(500).send("Could not retrieve timetable.");
     }
-
-    const events = createEvents(createdTimetable.map(convertLessonToEvent));
-    if (events.error) {
-      return res.status(500).send("Could not create events.");
-    }
-    saveTimetable(classId, events.value as string);
-    res.status(200).send(events.value);
+    saveTimetable(classId, JSON.stringify(createdTimetable));
+    res
+      .status(200)
+      .send(
+        createCalendar(
+          createdTimetable,
+          req.query.options
+            ? (JSON.parse(req.query.options) as FormatOptions)
+            : undefined
+        )
+      );
   }
 );
+
+const createCalendar = (
+  timetable: Lesson[],
+  options: FormatOptions = { subjectFirst: false }
+) => {
+  return createEvents(
+    timetable.map((lesson) => convertLessonToEvent(lesson, options))
+  ).value;
+};
 
 const getTimetable = async (
   classId: number,

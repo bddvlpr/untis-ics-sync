@@ -4,11 +4,20 @@ import { Lesson } from "webuntis";
 
 /* Forgive me, for I have sinned */
 
-const convertLessonToEvent = (lesson: Lesson): EventAttributes => {
+interface FormatOptions {
+  subjectFirst?: boolean;
+}
+
+const convertLessonToEvent = (
+  lesson: Lesson,
+  options: FormatOptions
+): EventAttributes => {
   const classDate = convertNumberDateToDate(lesson.date);
   return {
     uid: String(lesson.id),
-    title: `${lesson.lstext}\n${lesson.su.map((s) => s.longname).join(", ")}`,
+    title: options.subjectFirst
+      ? `${lesson.su.map((s) => s.longname).join(", ")}\n${lesson.lstext}`
+      : `${lesson.lstext}\n${lesson.su.map((s) => s.longname).join(", ")}`,
     location: lesson.ro.map((room) => room.longname).join(", "),
     description: `Teacher: ${lesson.te
       .map((teacher) => teacher.longname)
@@ -54,4 +63,5 @@ export {
   convertDateToDateArray,
   convertNumberTimeToMinutes,
   convertNumberDateToDate,
+  FormatOptions,
 };
