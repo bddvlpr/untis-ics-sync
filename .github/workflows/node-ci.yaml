@@ -1,0 +1,14 @@
+name: Node CI
+on: [push]
+jobs:
+  build:
+    name: Install, lint and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: yarn install
+      - run: yarn lint
+      - run: yarn build
