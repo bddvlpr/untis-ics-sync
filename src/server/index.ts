@@ -15,8 +15,13 @@ const createServer = (port: number) => {
   app.use("/classes", classesRoute);
   app.use("/timetables", timetablesRoute);
 
-  app.listen(port, () => {
+  const server = app.listen(port, () => {
     logger.info(`Server listening on port ${port}`);
+  });
+
+  process.on("SIGTERM", () => {
+    logger.info("Sigterm recieved. Shutting down...");
+    server.close(() => process.exit());
   });
 };
 
