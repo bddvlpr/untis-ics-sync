@@ -1,4 +1,4 @@
-import { add } from "date-fns";
+import { add, sub } from "date-fns";
 import { Router } from "express";
 import { param, validationResult } from "express-validator";
 import { createEvents } from "ics";
@@ -30,8 +30,8 @@ router.get(
 
     const createdTimetable = await getTimetable(
       classId,
-      new Date(),
-      add(new Date(), { days: 14 })
+      sub(new Date(), { days: 14 }),
+      add(new Date(), { days: 31 })
     );
     if (!createdTimetable) {
       return res.status(500).send("Could not retrieve timetable.");
