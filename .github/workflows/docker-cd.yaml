@@ -1,5 +1,8 @@
 name: Docker CD
-on: [tag]
+on:
+  push:
+    tags:
+      - "v*.*.*"
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: untis-ics-sync
