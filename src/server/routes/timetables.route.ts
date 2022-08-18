@@ -20,19 +20,15 @@ router.get(
       return res.status(400).json({ errors: errors.array() });
     }
     const classId = req.params.classId;
+    const options = req.query.options
+      ? (JSON.parse(req.query.options) as FormatOptions)
+      : {};
     const retrievedTimetable = await redis.get(`timetables.${classId}`);
 
     if (retrievedTimetable) {
       res
         .status(200)
-        .send(
-          createCalendar(
-            JSON.parse(retrievedTimetable),
-            req.query.options
-              ? (JSON.parse(req.query.options) as FormatOptions)
-              : undefined
-          )
-        );
+        .send(createCalendar(JSON.parse(retrievedTimetable), options));
       return;
     }
     logger.info(
@@ -49,16 +45,7 @@ router.get(
       return res.status(500).send("Could not retrieve timetable.");
     }
     saveTimetable(classId, JSON.stringify(createdTimetable));
-    res
-      .status(200)
-      .send(
-        createCalendar(
-          createdTimetable,
-          req.query.options
-            ? (JSON.parse(req.query.options) as FormatOptions)
-            : undefined
-        )
-      );
+    res.status(200).send(createCalendar(createdTimetable, options));
   }
 );
 

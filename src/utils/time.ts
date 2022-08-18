@@ -19,7 +19,9 @@ const convertLessonToEvent = (
       ? `${lesson.su.map((s) => s.longname).join(", ")}\n${lesson.lstext}`
       : `${lesson.lstext}\n${lesson.su.map((s) => s.longname).join(", ")}`,
     location: lesson.ro.map((room) => room.longname).join(", "),
-    description: `Teacher: ${lesson.te
+    description: `Subject id: ${lesson.su
+      .map((s) => s.id)
+      .join(", ")}\nTeacher: ${lesson.te
       .map((teacher) => teacher.longname)
       .join(", ")}\nClasses: ${lesson.kl.map((s) => s.name).join(" ")}`,
     startInputType: "local",
