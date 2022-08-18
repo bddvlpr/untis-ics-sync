@@ -8,5 +8,5 @@ services:
     restart: unless-stopped
   redis:
     image: redis:alpine
-    command: redis-server,
+    command: redis-server
     restart: unless-stopped
