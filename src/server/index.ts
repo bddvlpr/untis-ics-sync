@@ -34,7 +34,7 @@ const createServer = (httpPort: number, httpsPort: number) => {
       },
       app
     )
-    .listen(httpPort, () => {
+    .listen(httpsPort, () => {
       logger.info(`Server listening on port (HTTPS) ${httpsPort}`);
     });
 

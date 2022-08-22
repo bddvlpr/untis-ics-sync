@@ -6,8 +6,8 @@ services:
     volumes:
       - ./ssl:/app/ssl
     ports:
-      - "8080:8080"
-      - "8443:8443"
+      - "80:80"
+      - "443:443"
     restart: unless-stopped
   redis:
     image: redis:alpine
