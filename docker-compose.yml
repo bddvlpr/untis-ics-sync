@@ -3,8 +3,11 @@ services:
     build: .
     env_file:
       - .env
+    volumes:
+      - ./ssl:/app/ssl
     ports:
-      - "3000:3000"
+      - "8080:8080"
+      - "8443:8443"
     restart: unless-stopped
   redis:
     image: redis:alpine

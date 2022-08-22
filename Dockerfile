@@ -17,5 +17,5 @@ COPY --from=build-env /app/node_modules ./node_modules
 
 LABEL version="0.1.3" maintainer="Luna Simons <luna@bddvlpr.com>"
 HEALTHCHECK --interval=10s --timeout=10s --start-period=5s --retries=3 CMD curl --fail http://localhost:3000/health || exit 1
-EXPOSE 3000
+EXPOSE 8080/tcp 8443/tcp
 CMD ["node", "index.js"]

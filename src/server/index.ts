@@ -1,11 +1,14 @@
 import cors from "cors";
 import express from "express";
+import http from "http";
+import https from "https";
+import fs from "fs";
 import logger from "./logger";
 import classesRoute from "./routes/classes.route";
 import healthRoute from "./routes/health.route";
 import timetablesRoute from "./routes/timetables.route";
 
-const createServer = (port: number) => {
+const createServer = (httpPort: number, httpsPort: number) => {
   const app = express();
 
   app.use(cors({ origin: "*" }));
@@ -17,13 +20,29 @@ const createServer = (port: number) => {
   app.use("/timetables", timetablesRoute);
   app.use("/health", healthRoute);
 
-  const server = app.listen(port, () => {
-    logger.info(`Server listening on port ${port}`);
-  });
+  const httpServer = http
+    .createServer(app)
+    .listen(80, () =>
+      logger.info(`Server listening on port (HTTP) ${httpPort}`)
+    );
+
+  const httpsServer = https
+    .createServer(
+      {
+        key: fs.readFileSync("./ssl/key.pem"),
+        cert: fs.readFileSync("./ssl/cert.pem"),
+      },
+      app
+    )
+    .listen(httpPort, () => {
+      logger.info(`Server listening on port (HTTPS) ${httpsPort}`);
+    });
 
   process.on("SIGTERM", () => {
     logger.info("Sigterm recieved. Shutting down...");
-    server.close(() => process.exit());
+    httpServer.close();
+    httpsServer.close();
+    process.exit();
   });
 };
 

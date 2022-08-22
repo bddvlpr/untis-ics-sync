@@ -2,6 +2,7 @@
 node_modules
 /build
 /dist
+/ssl
 /package
 .env
 .env.*

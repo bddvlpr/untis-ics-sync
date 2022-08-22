@@ -1,5 +1,8 @@
 import { createServer } from "./server";
 
 (() => {
-  createServer(Number(process.env.SERVER_PORT) || 3000);
+  createServer(
+    Number(process.env.HTTP_PORT) || 8080,
+    Number(process.env.HTTPS_PORT) || 8443
+  );
 })();
