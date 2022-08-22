@@ -37,8 +37,12 @@ router.get(
 
     const createdTimetable = await getTimetable(
       classId,
-      sub(new Date(), { days: 31 }),
-      add(new Date(), { days: 31 })
+      sub(new Date(), {
+        days: Number(process.env.TIMETABLES_PREVIOUS_DAYS) || 7,
+      }),
+      add(new Date(), {
+        days: Number(process.env.TIMETABLES_FOLLOWING_DAYS) || 25,
+      })
     );
     logger.debug(`Pulled ${createdTimetable?.length} entries.`);
     if (!createdTimetable) {
