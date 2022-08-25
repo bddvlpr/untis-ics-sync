@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "repository": "https://github.com/bddvlpr/untis-ics-sync.git",
   "author": "Luna Simons <luna@bddvlpr.com>",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "private": true,
   "scripts": {
     "build": "tsc",
