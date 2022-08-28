@@ -13,6 +13,7 @@ Simply clone the repository and cd into it.
 `git clone https://github.com/bddvlpr/untis-ics-sync && cd untis-ics-sync`.
 
 ### Setup SSL
+
 Create a new directory called `ssl` with certificate `cert.pem` and key `key.pem` in it. Make sure to enable https in the `.env` file.
 
 ### Using Docker
