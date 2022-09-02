@@ -23,7 +23,7 @@ const createServer = (httpPort: number, httpsPort: number) => {
   app.use("/timetables", timetablesRoute);
   app.use("/health", healthRoute);
 
-  if (process.env.ENABLE_HTTPS === "true") {
+  if (process.env.ENABLE_HTTP === "true") {
     httpServer = http
       .createServer(app)
       .listen(80, () =>
