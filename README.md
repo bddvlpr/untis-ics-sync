@@ -14,6 +14,7 @@ Due to this limitation I've wrote my own implementation to dynamically sync clas
 
 Simply clone the repository and cd into it.  
 `git clone https://github.com/bddvlpr/untis-ics-sync && cd untis-ics-sync`.
+If you're planning on using Docker, you could use the [bddvlpr/untis-ics-sync](https://hub.docker.com/r/bddvlpr/untis-ics-sync/) image from Docker Hub instead of the git repository.
 
 ### Setup SSL
 
