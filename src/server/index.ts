@@ -26,7 +26,7 @@ const createServer = (httpPort: number, httpsPort: number) => {
   if (process.env.ENABLE_HTTP === "true") {
     httpServer = http
       .createServer(app)
-      .listen(80, () =>
+      .listen(httpPort, () =>
         logger.info(`Server listening on port (HTTP) ${httpPort}`)
       );
   }
