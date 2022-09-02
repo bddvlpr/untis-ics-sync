@@ -1,6 +1,6 @@
 services:
   server:
-    build: bddvlpr/untis-ics-sync:latest
+    image: bddvlpr/untis-ics-sync:latest
     env_file:
       - .env
     environment:
