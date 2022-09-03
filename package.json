@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon src/index.ts",
-    "test": "jest",
+    "test": "jest --forceExit",
     "commit": "cz",
     "lint": "prettier --check --plugin-search-dir=. . && eslint .",
     "format": "prettier --write --plugin-search-dir=. . && eslint . --fix"

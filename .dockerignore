@@ -4,6 +4,7 @@ node_modules
 /dist
 /ssl
 /package
+__tests__
 .env
 .env.*
 !.env.example
