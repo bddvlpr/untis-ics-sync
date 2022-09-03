@@ -1,8 +1,7 @@
-import cors from "cors";
-import express from "express";
 import http from "http";
 import https from "https";
-import fs from "fs";
+import cors from "cors";
+import express, { Express } from "express";
 import logger from "./logger";
 import classesRoute from "./routes/classes.route";
 import healthRoute from "./routes/health.route";
@@ -11,7 +10,7 @@ import timetablesRoute from "./routes/timetables.route";
 let httpServer: http.Server;
 let httpsServer: https.Server;
 
-const createServer = (httpPort: number, httpsPort: number) => {
+const createApp = (): Express => {
   const app = express();
 
   app.use(cors({ origin: "*" }));
@@ -23,34 +22,7 @@ const createServer = (httpPort: number, httpsPort: number) => {
   app.use("/timetables", timetablesRoute);
   app.use("/health", healthRoute);
 
-  if (process.env.ENABLE_HTTP === "true") {
-    httpServer = http
-      .createServer(app)
-      .listen(httpPort, () =>
-        logger.info(`Server listening on port (HTTP) ${httpPort}`)
-      );
-  }
-
-  if (process.env.ENABLE_HTTPS === "true") {
-    httpsServer = https
-      .createServer(
-        {
-          key: fs.readFileSync("./ssl/key.pem"),
-          cert: fs.readFileSync("./ssl/cert.pem"),
-        },
-        app
-      )
-      .listen(httpsPort, () => {
-        logger.info(`Server listening on port (HTTPS) ${httpsPort}`);
-      });
-  }
-
-  process.on("SIGTERM", () => {
-    logger.info("Sigterm recieved. Shutting down...");
-    if (httpServer) httpServer.close();
-    if (httpsServer) httpsServer.close();
-    process.exit();
-  });
+  return app;
 };
 
-export { createServer, httpServer, httpsServer };
+export { createApp, httpServer, httpsServer };

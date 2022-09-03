@@ -3,14 +3,8 @@ services:
     image: bddvlpr/untis-ics-sync:latest
     env_file:
       - .env
-    environment:
-      - ENABLE_HTTP=true
-      - ENABLE_HTTPS=true
-    volumes:
-      - ./ssl:/app/ssl
     ports:
-      - "80:80"
-      - "443:443"
+      - "3000:3000"
     restart: unless-stopped
   redis:
     image: redis:alpine

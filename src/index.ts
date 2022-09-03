@@ -1,8 +1,16 @@
-import { createServer } from "./server";
+import http from "http";
+import { createApp } from "./server";
+import logger from "./server/logger";
 
 (() => {
-  createServer(
-    Number(process.env.HTTP_PORT) || 80,
-    Number(process.env.HTTPS_PORT) || 443
-  );
+  const app = createApp();
+
+  const server = http.createServer(app).listen(3000, () => {
+    logger.info("Server listening on port 3000.");
+  });
+
+  process.on("SIGTERM", () => {
+    logger.info("Shutting down server(s)...");
+    server.close();
+  });
 })();
