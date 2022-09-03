@@ -18,7 +18,8 @@ If you're planning on using Docker, you could use the [bddvlpr/untis-ics-sync](h
 
 ### Setup SSL
 
-Create a new directory called `ssl` with certificate `cert.pem` and key `key.pem` in it. Make sure to enable https in the `.env` file.
+From version 0.2.6 and forward, SSL will not be natively supported anymore.
+Please use a reverse proxy instead of supplying the docker container with an ssl certificate.
 
 ### Using Docker
 
