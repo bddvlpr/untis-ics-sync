@@ -1,4 +1,4 @@
-FROM node:16 AS build-env
+FROM node:18 AS build-env
 WORKDIR /app
 
 COPY package.json .
@@ -9,7 +9,7 @@ RUN yarn install
 COPY . .
 RUN yarn build
 
-FROM node:16 AS runtime-env
+FROM node:18 AS runtime-env
 WORKDIR /app
 
 COPY --from=build-env /app/dist/ .
