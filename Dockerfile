@@ -17,4 +17,4 @@ COPY --from=build-env /app/node_modules ./node_modules
 
 HEALTHCHECK --interval=10s --timeout=10s --start-period=5s --retries=3 CMD curl --fail http://localhost:3000/health || exit 1
 EXPOSE 3000
-CMD ["node", "index.js"]
+CMD ["node", "src/index.js"]
