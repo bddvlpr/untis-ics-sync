@@ -25,5 +25,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          platforms: linux/amd64,linux/arm
+          platforms: linux/amd64
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/untis-ics-sync:latest,${{ secrets.DOCKER_HUB_USERNAME }}/untis-ics-sync:${{ env.RELEASE_VERSION }}
