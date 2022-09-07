@@ -17,7 +17,7 @@ const createApp = (): Express => {
   app.use(async (req, _, next) => {
     logger.info(
       `Serving ${req.method} ${req.path} from ${
-        req.headers["X-Real-IP"] || req.ip
+        req.headers["x-real-ip"] || req.ip
       }`
     );
     next();
