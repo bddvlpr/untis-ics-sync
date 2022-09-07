@@ -6,7 +6,9 @@ import { Lesson } from "webuntis";
 import { convertLessonToEvent, FormatOptions } from "../../utils/time";
 import logger from "../logger";
 import redis from "../redis";
-import untis from "../untis";
+import { getTimetables, getTimetablesSeperately } from "../retriever";
+
+let retrievingLock = false;
 
 const router = Router();
 
@@ -14,6 +16,7 @@ router.get(
   "/:classId",
   param("classId").isNumeric().exists(),
   query("options").isJSON().optional(),
+  query("insecure").isBoolean().optional(),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty() || !req.params || !req.query) {
@@ -32,24 +35,32 @@ router.get(
       return;
     }
     logger.info(
-      `No cache found for classId ${classId}. Retrieving from untis.`
+      `No cache found for classId ${classId}. Attempting to gather from untis.`
     );
 
-    const createdTimetable = await getTimetable(
-      classId,
-      sub(new Date(), {
-        days: Number(process.env.TIMETABLES_PREVIOUS_DAYS) || 7,
-      }),
-      add(new Date(), {
-        days: Number(process.env.TIMETABLES_FOLLOWING_DAYS) || 25,
-      })
-    );
-    logger.debug(`Pulled ${createdTimetable?.length} entries.`);
-    if (!createdTimetable) {
-      return res.status(500).send("Could not retrieve timetable.");
+    if (!retrievingLock) {
+      retrievingLock = true;
+      try {
+        const dateStart = sub(new Date(), {
+          days: Number(process.env.TIMETABLES_PREVIOUS_DAYS) || 7,
+        });
+        const dateEnd = add(new Date(), {
+          days: Number(process.env.TIMETABLES_FOLLOWING_DAYS) || 25,
+        });
+
+        const createdTimetable = await (req.query.insecure
+          ? getTimetables(dateStart, dateEnd, classId)
+          : getTimetablesSeperately(dateStart, dateEnd, classId));
+        logger.debug(`Pulled ${createdTimetable?.length} entries.`);
+        if (!createdTimetable) {
+          return res.status(500).send("Could not retrieve timetable.");
+        }
+        saveTimetable(classId, JSON.stringify(createdTimetable));
+        res.status(200).send(createCalendar(createdTimetable, options));
+      } finally {
+        retrievingLock = false;
+      }
     }
-    saveTimetable(classId, JSON.stringify(createdTimetable));
-    res.status(200).send(createCalendar(createdTimetable, options));
   }
 );
 
@@ -60,26 +71,6 @@ const createCalendar = (
   return createEvents(
     timetable.map((lesson) => convertLessonToEvent(lesson, options))
   ).value;
-};
-
-const getTimetable = async (
-  classId: number,
-  dateStart: Date,
-  dateEnd: Date
-) => {
-  try {
-    await untis.login();
-    const timetable = await untis.getTimetableForRange(
-      dateStart,
-      dateEnd,
-      classId,
-      1
-    );
-
-    return timetable;
-  } catch (err) {
-    logger.error(err);
-  }
 };
 
 const saveTimetable = async (classId: number, events: string) => {
