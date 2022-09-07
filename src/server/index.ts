@@ -15,7 +15,11 @@ const createApp = (): Express => {
 
   app.use(cors({ origin: "*" }));
   app.use(async (req, _, next) => {
-    logger.info(`Serving ${req.method} ${req.path} from ${req.ip}`);
+    logger.info(
+      `Serving ${req.method} ${req.path} from ${
+        req.headers["X-Real-IP"] || req.ip
+      }`
+    );
     next();
   });
   app.use("/classes", classesRoute);
