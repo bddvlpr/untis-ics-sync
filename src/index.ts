@@ -12,5 +12,6 @@ import logger from "./server/logger";
   process.on("SIGTERM", () => {
     logger.info("Shutting down server(s)...");
     server.close();
+    process.exit(0);
   });
 })();
