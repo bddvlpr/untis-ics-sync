@@ -5,6 +5,7 @@ import express, { Express } from "express";
 import logger from "./logger";
 import classesRoute from "./routes/classes.route";
 import healthRoute from "./routes/health.route";
+import holidaysRoute from "./routes/holidays.route";
 import timetablesRoute from "./routes/timetables.route";
 
 let httpServer: http.Server;
@@ -24,6 +25,7 @@ const createApp = (): Express => {
   });
   app.use("/classes", classesRoute);
   app.use("/timetables", timetablesRoute);
+  app.use("/holidays", holidaysRoute);
   app.use("/health", healthRoute);
 
   return app;

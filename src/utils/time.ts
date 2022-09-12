@@ -1,6 +1,6 @@
 import { add } from "date-fns";
 import { DateArray, EventAttributes } from "ics";
-import { Lesson } from "webuntis";
+import { Holiday, Lesson } from "webuntis";
 
 /* Forgive me, for I have sinned */
 
@@ -37,6 +37,24 @@ const convertLessonToEvent = (
   };
 };
 
+const convertHolidayToEvent = (holiday: Holiday): EventAttributes => {
+  return {
+    uid: String(holiday.id),
+    title: holiday.longName,
+    description: holiday.name,
+    startInputType: "local",
+    startOutputType: "local",
+    start: convertDateToDateArray(
+      convertNumberDateToDate(Number(holiday.startDate))
+    ),
+    endInputType: "local",
+    endOutputType: "local",
+    end: convertDateToDateArray(
+      convertNumberDateToDate(Number(holiday.endDate))
+    ),
+  };
+};
+
 const convertDateToDateArray = (date: Date): DateArray => {
   return [
     date.getFullYear(),
@@ -62,6 +80,7 @@ const convertNumberDateToDate = (date: number) => {
 
 export {
   convertLessonToEvent,
+  convertHolidayToEvent,
   convertDateToDateArray,
   convertNumberTimeToMinutes,
   convertNumberDateToDate,
