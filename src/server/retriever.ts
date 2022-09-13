@@ -50,4 +50,9 @@ const getTimetablesSeperately = async (
   }
 };
 
-export { getTimetables, getTimetablesSeperately };
+const getHolidays = async () => {
+  await untis.login();
+  return await untis.getHolidays();
+};
+
+export { getTimetables, getTimetablesSeperately, getHolidays };

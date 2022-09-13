@@ -3,10 +3,18 @@ import { Router } from "express";
 import { param, query, validationResult } from "express-validator";
 import { createEvents } from "ics";
 import { Lesson } from "webuntis";
-import { convertLessonToEvent, FormatOptions } from "../../utils/time";
+import {
+  convertHolidayToEvent,
+  convertLessonToEvent,
+  FormatOptions,
+} from "../../utils/time";
 import logger from "../logger";
 import redis from "../redis";
-import { getTimetables, getTimetablesSeperately } from "../retriever";
+import {
+  getHolidays,
+  getTimetables,
+  getTimetablesSeperately,
+} from "../retriever";
 
 let retrievingLock = false;
 
@@ -31,7 +39,7 @@ router.get(
     if (retrievedTimetable) {
       res
         .status(200)
-        .send(createCalendar(JSON.parse(retrievedTimetable), options));
+        .send(await createCalendar(JSON.parse(retrievedTimetable), options));
       return;
     }
     logger.info(
@@ -56,7 +64,9 @@ router.get(
           return res.status(500).send("Could not retrieve timetable.");
         }
         saveTimetable(classId, JSON.stringify(createdTimetable));
-        res.status(200).send(createCalendar(createdTimetable, options));
+        res
+          .status(200)
+          .send(await createCalendar([...createdTimetable], options));
       } finally {
         retrievingLock = false;
       }
@@ -64,13 +74,14 @@ router.get(
   }
 );
 
-const createCalendar = (
+const createCalendar = async (
   timetable: Lesson[],
   options: FormatOptions = { subjectFirst: false }
 ) => {
-  return createEvents(
-    timetable.map((lesson) => convertLessonToEvent(lesson, options))
-  ).value;
+  return createEvents([
+    ...timetable.map((lesson) => convertLessonToEvent(lesson, options)),
+    ...(await getHolidays()).map((holiday) => convertHolidayToEvent(holiday)),
+  ]).value;
 };
 
 const saveTimetable = async (classId: number, events: string) => {
