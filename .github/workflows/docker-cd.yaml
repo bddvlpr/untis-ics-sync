@@ -3,6 +3,7 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
 jobs:
   build-and-push:
     name: Build Docker image and push
@@ -25,5 +26,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/untis-ics-sync:${{ env.RELEASE_VERSION }},${{ secrets.DOCKER_HUB_USERNAME }}/untis-ics-sync:latest
