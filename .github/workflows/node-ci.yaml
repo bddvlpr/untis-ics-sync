@@ -1,7 +1,7 @@
 name: Node CI
 on: [push]
 jobs:
-  build:
+  node-build:
     name: Install, lint, build and test
     runs-on: ubuntu-latest
     steps:
