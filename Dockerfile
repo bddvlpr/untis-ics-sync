@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package.json .
 COPY yarn.lock .
 COPY tsconfig.json .
-RUN yarn install
+RUN yarn install --frozen-lockfile --network-timeout 1000000 
 
 COPY . .
 RUN yarn build
