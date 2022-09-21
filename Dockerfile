@@ -2,8 +2,8 @@ FROM node:18 AS build-env
 WORKDIR /app
 
 COPY package.json .
-COPY yarn.lock ./
-COPY tsconfig.json ./
+COPY yarn.lock .
+COPY tsconfig.json .
 RUN yarn install
 
 COPY . .
