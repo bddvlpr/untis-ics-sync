@@ -1,6 +1,5 @@
-import { add } from "date-fns";
 import { DateArray, EventAttributes } from "ics";
-import { Holiday, Lesson } from "webuntis";
+import WebUntis, { Holiday, Lesson } from "webuntis";
 
 /* Forgive me, for I have sinned */
 
@@ -12,7 +11,7 @@ const convertLessonToEvent = (
   lesson: Lesson,
   options: FormatOptions
 ): EventAttributes => {
-  const classDate = convertNumberDateToDate(lesson.date);
+  const classDate = WebUntis.convertUntisDate(lesson.date);
   return {
     uid: String(lesson.id),
     title: options.subjectFirst
@@ -27,12 +26,12 @@ const convertLessonToEvent = (
     startInputType: "local",
     startOutputType: "local",
     start: convertDateToDateArray(
-      add(classDate, { minutes: convertNumberTimeToMinutes(lesson.startTime) })
+      WebUntis.convertUntisTime(lesson.startTime, classDate)
     ),
     endInputType: "local",
     endOutputType: "local",
     end: convertDateToDateArray(
-      add(classDate, { minutes: convertNumberTimeToMinutes(lesson.endTime) })
+      WebUntis.convertUntisTime(lesson.endTime, classDate)
     ),
   };
 };
@@ -45,12 +44,12 @@ const convertHolidayToEvent = (holiday: Holiday): EventAttributes => {
     startInputType: "local",
     startOutputType: "local",
     start: convertDateToDateArray(
-      convertNumberDateToDate(Number(holiday.startDate))
+      WebUntis.convertUntisDate(String(holiday.startDate))
     ),
     endInputType: "local",
     endOutputType: "local",
     end: convertDateToDateArray(
-      convertNumberDateToDate(Number(holiday.endDate))
+      WebUntis.convertUntisDate(String(holiday.startDate))
     ),
   };
 };
@@ -65,24 +64,9 @@ const convertDateToDateArray = (date: Date): DateArray => {
   ];
 };
 
-const convertNumberTimeToMinutes = (time: number) => {
-  const hours = Math.floor(time / 100);
-  const minutes = time % 100;
-  return hours * 60 + minutes;
-};
-
-const convertNumberDateToDate = (date: number) => {
-  const years = Math.floor(date / 1e4);
-  const months = Math.floor((date % 1e4) / 100);
-  const days = date % 100;
-  return new Date(years, months - 1, days);
-};
-
 export {
   convertLessonToEvent,
   convertHolidayToEvent,
   convertDateToDateArray,
-  convertNumberTimeToMinutes,
-  convertNumberDateToDate,
   FormatOptions,
 };
