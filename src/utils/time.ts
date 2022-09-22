@@ -7,6 +7,7 @@ import WebUntis, { Holiday, Lesson } from "webuntis";
 interface FormatOptions {
   subjectFirst?: boolean;
   offsetHours?: number;
+  excludeClasses?: number[];
 }
 
 const convertLessonToEvent = (

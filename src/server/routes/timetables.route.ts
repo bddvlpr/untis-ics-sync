@@ -79,7 +79,16 @@ const createCalendar = async (
   options: FormatOptions = { subjectFirst: false }
 ) => {
   return createEvents([
-    ...timetable.map((lesson) => convertLessonToEvent(lesson, options)),
+    ...timetable
+      .filter((lesson) => {
+        if (options.excludeClasses) {
+          return !lesson.su.some((su) =>
+            options.excludeClasses?.includes(su.id)
+          );
+        }
+        return true;
+      })
+      .map((lesson) => convertLessonToEvent(lesson, options)),
     ...(await getHolidays()).map((holiday) => convertHolidayToEvent(holiday)),
   ]).value;
 };
