@@ -1,3 +1,4 @@
+import { add } from "date-fns";
 import { DateArray, EventAttributes } from "ics";
 import WebUntis, { Holiday, Lesson } from "webuntis";
 
@@ -5,6 +6,7 @@ import WebUntis, { Holiday, Lesson } from "webuntis";
 
 interface FormatOptions {
   subjectFirst?: boolean;
+  offsetHours?: number;
 }
 
 const convertLessonToEvent = (
@@ -26,12 +28,16 @@ const convertLessonToEvent = (
     startInputType: "local",
     startOutputType: "local",
     start: convertDateToDateArray(
-      WebUntis.convertUntisTime(lesson.startTime, classDate)
+      add(WebUntis.convertUntisTime(lesson.startTime, classDate), {
+        hours: options.offsetHours,
+      })
     ),
     endInputType: "local",
     endOutputType: "local",
     end: convertDateToDateArray(
-      WebUntis.convertUntisTime(lesson.endTime, classDate)
+      add(WebUntis.convertUntisTime(lesson.endTime, classDate), {
+        hours: options.offsetHours,
+      })
     ),
   };
 };
