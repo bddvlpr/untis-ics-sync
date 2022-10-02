@@ -74,14 +74,11 @@ router.get(
   }
 );
 
-const createCalendar = async (
-  timetable: Lesson[],
-  options: FormatOptions = { subjectFirst: false }
-) => {
+const createCalendar = async (timetable: Lesson[], options: FormatOptions) => {
   return createEvents([
     ...timetable
       .filter((lesson) => {
-        if (options.excludeClasses) {
+        if (options?.excludeClasses) {
           return !lesson.su.some((su) =>
             options.excludeClasses?.includes(su.id)
           );

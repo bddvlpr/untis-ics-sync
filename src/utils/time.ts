@@ -5,7 +5,6 @@ import WebUntis, { Holiday, Lesson } from "webuntis";
 /* Forgive me, for I have sinned */
 
 interface FormatOptions {
-  subjectFirst?: boolean;
   offsetHours?: number;
   excludeClasses?: number[];
 }
@@ -17,15 +16,9 @@ const convertLessonToEvent = (
   const classDate = WebUntis.convertUntisDate(lesson.date);
   return {
     uid: String(lesson.id),
-    title: options.subjectFirst
-      ? `${lesson.su.map((s) => s.longname).join(", ")}\n${lesson.lstext}`
-      : `${lesson.lstext}\n${lesson.su.map((s) => s.longname).join(", ")}`,
+    title: createTitle(lesson),
     location: lesson.ro.map((room) => room.longname).join(", "),
-    description: `Subject id: ${lesson.su
-      .map((s) => s.id)
-      .join(", ")}\nTeacher: ${lesson.te
-      .map((teacher) => teacher.longname)
-      .join(", ")}\nClasses: ${lesson.kl.map((s) => s.name).join(" ")}`,
+    description: createDescription(lesson),
     startInputType: "local",
     startOutputType: "local",
     start: convertDateToDateArray(
@@ -41,6 +34,35 @@ const convertLessonToEvent = (
       })
     ),
   };
+};
+
+const createTitle = (lesson: Lesson): string => {
+  const title = [];
+
+  if (lesson.su && lesson.su.length > 0)
+    title.push(lesson.su.map((subject) => subject.longname).join(", "));
+
+  if (lesson.lstext) title.push(`(${lesson.lstext})`);
+
+  return title.join(" ");
+};
+
+const createDescription = (lesson: Lesson): string => {
+  const description = [];
+
+  // Apparently lesson.te can be undefined even though the types say otherwise.
+  if (lesson.te && lesson.te.length > 0)
+    description.push(
+      `Teacher(s): ${lesson.te.map((teacher) => teacher.longname).join(", ")}`
+    );
+
+  // Apparently lesson.kl can be undefined even though the types say otherwise.
+  if (lesson.kl && lesson.kl.length > 0)
+    description.push(
+      `Class(es): ${lesson.kl.map((klasse) => klasse.longname).join(", ")}`
+    );
+
+  return description.join("\n");
 };
 
 const convertHolidayToEvent = (holiday: Holiday): EventAttributes => {
