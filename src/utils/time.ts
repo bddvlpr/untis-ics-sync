@@ -1,5 +1,5 @@
 import { add } from "date-fns";
-import { DateArray, EventAttributes } from "ics";
+import { Alarm, DateArray, EventAttributes } from "ics";
 import WebUntis, { Holiday, Lesson } from "webuntis";
 
 /* Forgive me, for I have sinned */
@@ -7,6 +7,7 @@ import WebUntis, { Holiday, Lesson } from "webuntis";
 interface FormatOptions {
   offsetHours?: number;
   excludeClasses?: number[];
+  notifyBefore?: number;
 }
 
 const convertLessonToEvent = (
@@ -33,6 +34,7 @@ const convertLessonToEvent = (
         hours: options.offsetHours,
       })
     ),
+    alarms: createAlarms(options),
   };
 };
 
@@ -66,6 +68,20 @@ const createDescription = (lesson: Lesson): string => {
   description.push(`Identification: ${lesson.id}`);
 
   return description.join("\n");
+};
+
+const createAlarms = (options: FormatOptions): Alarm[] => {
+  if (!options.notifyBefore) return [];
+
+  return [
+    {
+      action: "display",
+      trigger: {
+        minutes: options.notifyBefore,
+        before: true,
+      },
+    },
+  ];
 };
 
 const convertHolidayToEvent = (holiday: Holiday): EventAttributes => {
