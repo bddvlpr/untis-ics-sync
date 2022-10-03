@@ -64,6 +64,13 @@ const createDescription = (lesson: Lesson): string => {
       `Class(es): ${lesson.kl.map((klasse) => klasse.longname).join(", ")}`
     );
 
+  if (lesson.su && lesson.su.length > 0)
+    description.push(
+      `Subject(s): ${lesson.su
+        .map((subject) => `${subject.longname} (${subject.id})`)
+        .join(", ")}`
+    );
+
   return description.join("\n");
 };
 
