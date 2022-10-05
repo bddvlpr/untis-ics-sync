@@ -5,7 +5,7 @@ import logger from "./logger";
 const createRedis = () => {
   dotenv.config();
   const client = createClient({
-    url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+    url: process.env.REDIS_URI,
   });
 
   client.on("error", (err) => {
