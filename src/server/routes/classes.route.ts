@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { query, validationResult } from "express-validator";
 import { Klasse } from "webuntis";
-import logger from "../logger";
 import redis from "../redis";
 import untis from "../untis";
 
@@ -34,21 +33,16 @@ router.get("/search", query("name").isString().exists(), async (req, res) => {
 });
 
 const getClasses = async (): Promise<Klasse[] | undefined> => {
-  try {
-    const cachedClasses = await redis.get("classes");
-    if (cachedClasses) {
-      return JSON.parse(cachedClasses);
-    }
-
-    await untis.login();
-    const classes = await untis.getClasses();
-    await redis.set("classes", JSON.stringify(classes), {
-      EX: Number(process.env.CACHE_EXPIRE_TIME) | 3600,
-    });
-    return classes;
-  } catch (err) {
-    logger.error(err);
+  const cachedClasses = await redis.get("classes");
+  if (cachedClasses) {
+    return JSON.parse(cachedClasses);
   }
+
+  const classes = await untis.getClasses();
+  await redis.set("classes", JSON.stringify(classes), {
+    EX: Number(process.env.CACHE_EXPIRE_TIME) | 3600,
+  });
+  return classes;
 };
 
 export default router;
