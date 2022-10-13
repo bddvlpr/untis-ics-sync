@@ -16,6 +16,6 @@ import logger from "./server/logger";
   });
 
   process.on("uncaughtException", (err: Error) => {
-    logger.error(`${err.stack}`);
+    logger.error(err);
   });
 })();
