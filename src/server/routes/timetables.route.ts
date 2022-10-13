@@ -77,7 +77,7 @@ const getCachedTimetable = async (classId: number) => {
 
 const saveCachedTimetable = async (classId: number, events: string) => {
   redis.set(`timetables.${String(classId)}`, events, {
-    EX: Number(process.env.CACHE_EXPIRE_TIME) || 3600,
+    EX: Number(env.CACHE_EXPIRE_TIME),
   });
 };
 
