@@ -27,3 +27,7 @@ Deploy the app using `docker compose up -d`, remove it using `docker compose dow
 
 To run the app using Yarn, copy over the `.env.example` to `.env` and fill in the parameters to get the app to work.
 Hot run the app using `yarn dev`, or build it using `yarn build`.
+
+## Bull-board integration
+
+If the `BULLBOARD_PASSWORD` environment variable is set, it can be used to login at `/bullboard` with the given password and `admin` user. If it is not set, it'll simply remain disabled and unavailable.

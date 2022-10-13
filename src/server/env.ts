@@ -14,6 +14,8 @@ export default z
     TIMETABLES_FOLLOWING_DAYS: z.string().transform((value) => parseInt(value)),
     TIMETABLES_PREVIOUS_DAYS: z.string().transform((value) => parseInt(value)),
 
+    BULLBOARD_PASSWORD: z.string().optional(),
+
     CACHE_EXPIRE_TIME: z.string().transform((value) => parseInt(value)),
   })
   .parse(process.env);
