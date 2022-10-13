@@ -3,6 +3,7 @@ import https from "https";
 import cors from "cors";
 import express, { Express } from "express";
 import logger from "./logger";
+import bullboardRoute from "./routes/bullboard.route";
 import classesRoute from "./routes/classes.route";
 import healthRoute from "./routes/health.route";
 import holidaysRoute from "./routes/holidays.route";
@@ -27,6 +28,7 @@ const createApp = (): Express => {
   app.use("/timetables", timetablesRoute);
   app.use("/holidays", holidaysRoute);
   app.use("/health", healthRoute);
+  app.use("/bullboard", bullboardRoute);
 
   return app;
 };

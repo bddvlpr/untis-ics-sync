@@ -22,10 +22,13 @@
     }
   },
   "dependencies": {
+    "@bull-board/api": "^4.5.0",
+    "@bull-board/express": "^4.5.0",
     "bull": "^4.10.0",
     "cors": "^2.8.5",
     "date-fns": "^2.29.1",
     "express": "^4.18.1",
+    "express-basic-auth": "^1.2.1",
     "express-validator": "^6.14.2",
     "ics": "^2.37.0",
     "redis": "^4.2.0",
