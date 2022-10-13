@@ -30,4 +30,4 @@ Hot run the app using `yarn dev`, or build it using `yarn build`.
 
 ## Bull-board integration
 
-If the `BULLBOARD_PASSWORD` environment variable is set, it can be used to login at `/bull-board` with the given password and `admin` user. If it is not set, it'll simply remain disabled and unavailable.
+If the `BULLBOARD_PASSWORD` environment variable is set, it can be used to login at `/bullboard` with the given password and `admin` user. If it is not set, it'll simply remain disabled and unavailable.
