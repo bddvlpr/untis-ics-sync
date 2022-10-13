@@ -1,11 +1,12 @@
 import dotenv from "dotenv";
 import { createClient } from "redis";
+import env from "./env";
 import logger from "./logger";
 
 const createRedis = () => {
   dotenv.config();
   const client = createClient({
-    url: process.env.REDIS_URI,
+    url: env.REDIS_URI,
   });
 
   client.on("error", (err) => {

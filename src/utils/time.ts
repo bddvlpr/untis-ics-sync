@@ -116,9 +116,24 @@ const convertDateToDateArray = (date: Date): DateArray => {
   ];
 };
 
+const convertDateToString = (date: Date): string => {
+  return date.toLocaleDateString("en-US");
+};
+
+const convertDateToUnix = (date: Date): number => {
+  return Math.floor(date.getTime() / 1000);
+};
+
+const convertUnixToDate = (unix: number): Date => {
+  return new Date(unix * 1000);
+};
+
 export {
   convertLessonToEvent,
   convertHolidayToEvent,
   convertDateToDateArray,
+  convertDateToString,
+  convertDateToUnix,
+  convertUnixToDate,
   FormatOptions,
 };
