@@ -116,9 +116,14 @@ const convertDateToDateArray = (date: Date): DateArray => {
   ];
 };
 
+const convertDateToString = (date: Date): string => {
+  return date.toLocaleDateString("en-US");
+};
+
 export {
   convertLessonToEvent,
   convertHolidayToEvent,
   convertDateToDateArray,
+  convertDateToString,
   FormatOptions,
 };

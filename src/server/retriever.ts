@@ -1,44 +1,58 @@
 import { add } from "date-fns";
 import { Lesson } from "webuntis";
+import { convertDateToString } from "../utils/time";
 import logger from "./logger";
 import untis from "./untis";
 
-const getTimetables = async (
-  dateStart: Date,
-  dateEnd: Date,
+const fetchTimetable = async (start: Date, end: Date, classId: number) => {
+  return (
+    (await fetchTimetableInstant(start, end, classId)) ||
+    (await fetchTimetableIndividually(start, end, classId))
+  );
+};
+
+const fetchTimetableInstant = async (
+  start: Date,
+  end: Date,
   classId: number
 ) => {
   try {
-    await untis.login();
-    const timetable = await untis.getTimetableForRange(
-      dateStart,
-      dateEnd,
-      classId,
-      1
+    logger.info(
+      `(${classId}) Fetching timetable for ${convertDateToString(
+        start
+      )} to ${convertDateToString(end)} instantly.`
     );
+    await untis.login();
+
+    const timetable = await untis.getTimetableForRange(start, end, classId, 1);
     return timetable;
   } catch (err) {
     logger.error(err);
-    return [];
   }
 };
 
-// Since Untis does not always give a response to the one big request, make individual requests for each day that *might* fail.
-const getTimetablesSeperately = async (
-  dateStart: Date,
-  dateEnd: Date,
+const fetchTimetableIndividually = async (
+  start: Date,
+  end: Date,
   classId: number
 ) => {
   try {
+    logger.info(
+      `(${classId}) Fetching timetable from ${convertDateToString(
+        start
+      )} to ${convertDateToString(end)} individually.`
+    );
     await untis.login();
 
     const timetable: Lesson[] = [];
-    for (let date = dateStart; date <= dateEnd; date = add(date, { days: 1 })) {
+    for (let date = start; date <= end; date = add(date, { days: 1 })) {
       try {
-        logger.info(`Fetching timetable for ${date}.`);
+        logger.info(
+          `(${classId}) Fetching timetable for ${convertDateToString(date)}.`
+        );
         const lessons = await untis.getTimetableFor(date, classId, 1);
         timetable.push(...lessons);
-        logger.info(`Fetched ${lessons.length} lessons.`);
+        logger.info(`(${classId}) Fetched ${lessons.length} lessons.`);
       } catch (err) {
         logger.warn(err);
       }
@@ -46,7 +60,6 @@ const getTimetablesSeperately = async (
     return timetable;
   } catch (err) {
     logger.error(err);
-    return [];
   }
 };
 
@@ -55,4 +68,4 @@ const getHolidays = async () => {
   return await untis.getHolidays();
 };
 
-export { getTimetables, getTimetablesSeperately, getHolidays };
+export { fetchTimetable, getHolidays };
