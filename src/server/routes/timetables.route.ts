@@ -8,6 +8,7 @@ import {
   convertLessonToEvent,
   FormatOptions,
 } from "../../utils/time";
+import env from "../env";
 import logger from "../logger";
 import redis from "../redis";
 import {
@@ -50,10 +51,10 @@ router.get(
       retrievingLock = true;
       try {
         const dateStart = sub(new Date(), {
-          days: Number(process.env.TIMETABLES_PREVIOUS_DAYS) || 7,
+          days: Number(env.TIMETABLES_PREVIOUS_DAYS) || 7,
         });
         const dateEnd = add(new Date(), {
-          days: Number(process.env.TIMETABLES_FOLLOWING_DAYS) || 25,
+          days: Number(env.TIMETABLES_FOLLOWING_DAYS) || 25,
         });
 
         const createdTimetable = await (req.query.insecure

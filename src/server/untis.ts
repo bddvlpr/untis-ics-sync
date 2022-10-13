@@ -1,22 +1,23 @@
 import dotenv from "dotenv";
 import WebUntis from "webuntis";
+import env from "./env";
 
 const createUntis = () => {
   dotenv.config();
 
   let untis;
 
-  if (process.env.UNTIS_USERNAME && process.env.UNTIS_PASSWORD) {
+  if (env.UNTIS_USERNAME && env.UNTIS_PASSWORD) {
     untis = new WebUntis(
-      process.env.UNTIS_SCHOOL || "some school",
-      process.env.UNTIS_USERNAME || "username",
-      process.env.UNTIS_PASSWORD || "password",
-      process.env.UNTIS_BASEURL || "x.webuntis.com"
+      env.UNTIS_SCHOOL || "some school",
+      env.UNTIS_USERNAME || "username",
+      env.UNTIS_PASSWORD || "password",
+      env.UNTIS_BASEURL || "x.webuntis.com"
     );
   } else
     untis = new WebUntis.WebUntisAnonymousAuth(
-      process.env.UNTIS_SCHOOL || "some school",
-      process.env.UNTIS_BASEURL || "x.webuntis.com"
+      env.UNTIS_SCHOOL || "some school",
+      env.UNTIS_BASEURL || "x.webuntis.com"
     );
 
   untis.login();
