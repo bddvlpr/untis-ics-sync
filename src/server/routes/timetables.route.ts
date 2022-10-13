@@ -6,7 +6,6 @@ import { convertDateToUnix, FormatOptions } from "../../utils/time";
 import env from "../env";
 import logger from "../logger";
 import { timetableQueue } from "../queue";
-import redis from "../redis";
 
 const router = Router();
 
@@ -23,14 +22,6 @@ router.get(
     const options = req.query.options
       ? (JSON.parse(req.query.options) as FormatOptions)
       : {};
-
-    const retrievedTimetable = await getCachedTimetable(classId);
-    if (retrievedTimetable) {
-      res
-        .status(200)
-        .send(await createCalendar(JSON.parse(retrievedTimetable), options));
-      return;
-    }
 
     let fetchedTimetableJob = (
       await timetableQueue.getJobs(["waiting", "active", "delayed"])
@@ -60,25 +51,8 @@ router.get(
     }
 
     logger.debug(`Pulled ${returnedTimetable.length} entries.`);
-
-    saveCachedTimetable(classId, JSON.stringify(returnedTimetable));
     res.status(200).send(await createCalendar([...returnedTimetable], options));
   }
 );
-
-const getCachedTimetable = async (classId: number) => {
-  const retrievedTimetable = await redis.get(`timetables.${classId}`);
-
-  if (retrievedTimetable) {
-    logger.debug(`Found cache for classId ${classId}.`);
-    return retrievedTimetable;
-  }
-};
-
-const saveCachedTimetable = async (classId: number, events: string) => {
-  redis.set(`timetables.${String(classId)}`, events, {
-    EX: Number(env.CACHE_EXPIRE_TIME),
-  });
-};
 
 export default router;
