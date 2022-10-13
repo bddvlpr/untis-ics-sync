@@ -32,25 +32,26 @@ router.get(
       return;
     }
 
-    logger.info(
-      `No cache found for classId ${classId}. Attempting to gather from untis.`
-    );
+    let fetchedTimetableJob = (
+      await timetableQueue.getJobs(["waiting", "active", "delayed"])
+    ).find((job) => job.data.classId === classId);
 
-    // TODO: Check if a job is already in queue for this classid.
-
-    const fetchedTimetableJob = await timetableQueue.add({
-      classId,
-      startUnix: convertDateToUnix(
-        sub(new Date(), {
-          days: Number(env.TIMETABLES_PREVIOUS_DAYS),
-        })
-      ),
-      endUnix: convertDateToUnix(
-        add(new Date(), {
-          days: Number(env.TIMETABLES_FOLLOWING_DAYS),
-        })
-      ),
-    });
+    if (!fetchedTimetableJob) {
+      logger.debug(`No job found for classId ${classId}. Creating new job.`);
+      fetchedTimetableJob = await timetableQueue.add({
+        classId,
+        startUnix: convertDateToUnix(
+          sub(new Date(), {
+            days: Number(env.TIMETABLES_PREVIOUS_DAYS),
+          })
+        ),
+        endUnix: convertDateToUnix(
+          add(new Date(), {
+            days: Number(env.TIMETABLES_FOLLOWING_DAYS),
+          })
+        ),
+      });
+    }
 
     const returnedTimetable = await fetchedTimetableJob.finished();
 

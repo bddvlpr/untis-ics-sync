@@ -1,6 +1,5 @@
 import { createEvents } from "ics";
 import { Lesson } from "webuntis";
-import logger from "../server/logger";
 import { getHolidays } from "../server/retriever";
 import {
   convertHolidayToEvent,
@@ -19,7 +18,6 @@ const createCalendar = async (timetable: Lesson[], options: FormatOptions) => {
       )
       .forEach((nextLesson) => {
         if (nextLesson.startTime === lesson.endTime) {
-          logger.debug(`Merging ${lesson.id} with ${nextLesson.id}.`);
           lesson.endTime = nextLesson.endTime;
           timetable.splice(timetable.indexOf(nextLesson), 1);
         }
