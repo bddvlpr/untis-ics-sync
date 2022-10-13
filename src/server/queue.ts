@@ -1,7 +1,7 @@
 import Bull from "bull";
 import { convertUnixToDate } from "../utils/time";
 import env from "./env";
-import { fetchTimetable } from "./retriever";
+import { fetchClasses, fetchHolidays, fetchTimetable } from "./retriever";
 
 interface TimetableJob {
   classId: number;
@@ -22,6 +22,24 @@ const createTimetableQueue = () => {
   return timetableQueue;
 };
 
-const timetableQueue = createTimetableQueue();
+const createClassesQueue = () => {
+  const classesQueue = new Bull("classes", env.REDIS_URI);
+  classesQueue.process(async () => {
+    return await fetchClasses();
+  });
+  return classesQueue;
+};
 
-export { timetableQueue, TimetableJob };
+const createHolidaysQueue = () => {
+  const holidaysQueue = new Bull("holidays", env.REDIS_URI);
+  holidaysQueue.process(async () => {
+    return await fetchHolidays();
+  });
+  return holidaysQueue;
+};
+
+const timetableQueue = createTimetableQueue();
+const classesQueue = createClassesQueue();
+const holidaysQueue = createHolidaysQueue();
+
+export { timetableQueue, classesQueue, holidaysQueue, TimetableJob };

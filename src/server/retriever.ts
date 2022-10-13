@@ -4,6 +4,16 @@ import { convertDateToString } from "../utils/time";
 import logger from "./logger";
 import untis from "./untis";
 
+const fetchClasses = async () => {
+  await untis.login();
+  return await untis.getClasses();
+};
+
+const fetchHolidays = async () => {
+  await untis.login();
+  return await untis.getHolidays();
+};
+
 const fetchTimetable = async (start: Date, end: Date, classId: number) => {
   return (
     (await fetchTimetableInstant(start, end, classId)) ||
@@ -63,9 +73,4 @@ const fetchTimetableIndividually = async (
   }
 };
 
-const getHolidays = async () => {
-  await untis.login();
-  return await untis.getHolidays();
-};
-
-export { fetchTimetable, getHolidays };
+export { fetchClasses, fetchHolidays, fetchTimetable };

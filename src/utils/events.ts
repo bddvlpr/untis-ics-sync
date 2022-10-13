@@ -1,11 +1,6 @@
 import { createEvents } from "ics";
 import { Lesson } from "webuntis";
-import { getHolidays } from "../server/retriever";
-import {
-  convertHolidayToEvent,
-  convertLessonToEvent,
-  FormatOptions,
-} from "./time";
+import { convertLessonToEvent, FormatOptions } from "./time";
 
 const createCalendar = async (timetable: Lesson[], options: FormatOptions) => {
   // TODO: This is a very inefficient way of merging lessons. It should be done in the retriever if possible.
@@ -35,7 +30,6 @@ const createCalendar = async (timetable: Lesson[], options: FormatOptions) => {
         return true;
       })
       .map((lesson) => convertLessonToEvent(lesson, options)),
-    ...(await getHolidays()).map((holiday) => convertHolidayToEvent(holiday)),
   ]).value;
 };
 
