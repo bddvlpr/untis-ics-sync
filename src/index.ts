@@ -1,6 +1,8 @@
 import http from "http";
 import { createApp } from "./server";
 import logger from "./server/logger";
+import redis from "./server/redis";
+import untis from "./server/untis";
 
 (() => {
   const app = createApp();
@@ -12,6 +14,8 @@ import logger from "./server/logger";
   process.on("SIGTERM", () => {
     logger.info("Shutting down server(s)...");
     server.close();
+    redis.quit();
+    untis.logout();
     process.exit(0);
   });
 
