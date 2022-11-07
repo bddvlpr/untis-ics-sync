@@ -1,12 +1,30 @@
 services:
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:2.4.0
+    environment:
+      - CADDY_INGRESS_NETWORKS=caddy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+    restart: unless-stopped
+    networks:
+      - caddy
   server:
     image: bddvlpr/untis-ics-sync:latest
     env_file:
       - .env
-    ports:
-      - "3000:3000"
+    labels:
+      caddy: your.domain.com
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+      caddy.header: /*
     restart: unless-stopped
   redis:
     image: redis:alpine
     command: redis-server
     restart: unless-stopped
+
+networks:
+  caddy:
+
+volumes:
+  caddy_data:
