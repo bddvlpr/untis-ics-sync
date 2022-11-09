@@ -3,12 +3,16 @@ on: [push, pull_request]
 jobs:
   node-build:
     name: Install, lint, build and test
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x, 18.x]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{matrix.os}}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: ${{matrix.node-version}}
       - run: yarn install
       - run: yarn lint
       - run: yarn build
