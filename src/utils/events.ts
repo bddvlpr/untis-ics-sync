@@ -22,7 +22,11 @@ const createCalendar = async (timetable: Lesson[], options: FormatOptions) => {
   return createEvents([
     ...timetable
       .filter((lesson) => {
-        if (options?.excludeClasses) {
+        if (options?.includeClasses) {
+          return lesson.su.some((su) =>
+            options.includeClasses?.includes(su.id)
+          );
+        } else if (options?.excludeClasses) {
           return !lesson.su.some((su) =>
             options.excludeClasses?.includes(su.id)
           );

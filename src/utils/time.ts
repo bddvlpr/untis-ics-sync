@@ -6,6 +6,7 @@ import WebUntis, { Holiday, Lesson } from "webuntis";
 
 interface FormatOptions {
   offsetHours?: number;
+  includeClasses?: number[];
   excludeClasses?: number[];
   notifyBefore?: number;
 }
