@@ -3093,10 +3093,10 @@ iconv-lite@0.4.24, iconv-lite@^0.4.24:
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
 
-ics@^2.37.0:
-  version "2.41.0"
-  resolved "https://registry.yarnpkg.com/ics/-/ics-2.41.0.tgz#cd73e12e36bb8711f2d883a40b096203af26f450"
-  integrity sha512-6oleMfOpdBIrZGMNrTutwW7eFwua8lOkymDNxMXlsVF00HghqH+I3S6frt3a2rfjXTlkI0qiY2rnsKP2JQ9vJA==
+ics@^2.44.0:
+  version "2.44.0"
+  resolved "https://registry.yarnpkg.com/ics/-/ics-2.44.0.tgz#3502c239a5e3a2c4c655ec766ce5395698a877e4"
+  integrity sha512-JeiPjNeWkd7Qri/wfHqjZCtglVwRJRqy1MEFKn9QzatzxUyCOsx4YARPlLkU8UnPxpg4VtEjR+VRUG+Cvj6bDg==
   dependencies:
     nanoid "^3.1.23"
     yup "^0.32.9"
