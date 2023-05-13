@@ -22,7 +22,7 @@
     }
   },
   "dependencies": {
-    "@bull-board/api": "^4.5.0",
+    "@bull-board/api": "^4.12.2",
     "@bull-board/express": "^4.5.0",
     "bull": "^4.10.0",
     "cors": "^2.8.5",
