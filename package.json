@@ -31,7 +31,7 @@
     "express-basic-auth": "^1.2.1",
     "express-validator": "^6.14.2",
     "ics": "^2.37.0",
-    "redis": "^4.2.0",
+    "redis": "^4.6.5",
     "webuntis": "^1.22.1",
     "winston": "^3.8.1",
     "zod": "^3.21.4"
