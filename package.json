@@ -29,7 +29,7 @@
     "date-fns": "^2.29.1",
     "express": "^4.18.1",
     "express-basic-auth": "^1.2.1",
-    "express-validator": "^6.14.2",
+    "express-validator": "^6.15.0",
     "ics": "^2.37.0",
     "redis": "^4.6.5",
     "webuntis": "^1.22.1",
