@@ -24,7 +24,7 @@
   "dependencies": {
     "@bull-board/api": "^4.5.0",
     "@bull-board/express": "^4.5.0",
-    "bull": "^4.10.0",
+    "bull": "^4.10.4",
     "cors": "^2.8.5",
     "date-fns": "^2.29.1",
     "express": "^4.18.1",
