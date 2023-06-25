@@ -4,6 +4,10 @@ node_modules
 /dist
 /ssl
 /package
+
+# Nix build output
+/result
+
 __tests__
 .env
 .env.*
