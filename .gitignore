@@ -134,3 +134,6 @@ dist
 
 # Certificates
 /ssl
+
+# Nix/NixOS build artifacts
+/result
