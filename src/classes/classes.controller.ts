@@ -1,4 +1,3 @@
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import {
   Controller,
   Get,
@@ -6,14 +5,12 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
-  UseInterceptors,
 } from '@nestjs/common';
 import { ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UntisService } from 'src/untis/untis.service';
 import { GetClassDto } from './dto/get-class.dto';
 
 @ApiTags('classes')
-@UseInterceptors(CacheInterceptor)
 @Controller('classes')
 export class ClassesController {
   constructor(private readonly untisService: UntisService) {}
