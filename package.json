@@ -22,11 +22,13 @@
   "dependencies": {
     "@nestjs/cache-manager": "^2.1.0",
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^3.0.1",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^7.1.10",
     "cache-manager": "^5.2.3",
     "helmet": "^7.0.0",
+    "moment": "^2.29.4",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "webuntis": "^2.0.3"

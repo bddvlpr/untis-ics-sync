@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class GetClassDto {
+export class GetSubjectDto {
   @ApiProperty()
   id: number;
 
@@ -11,7 +11,10 @@ export class GetClassDto {
   longName: string;
 
   @ApiProperty()
-  did: number;
+  active: boolean;
+
+  @ApiPropertyOptional()
+  alternateName?: string;
 
   @ApiPropertyOptional()
   foreColor?: string;

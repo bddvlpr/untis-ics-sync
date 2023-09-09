@@ -1,6 +1,9 @@
-# compiled output
+# Compiled output
 /dist
 /node_modules
+
+# Environment
+.env
 
 # Logs
 logs

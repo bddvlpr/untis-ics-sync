@@ -1,6 +1,5 @@
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import {
-  CacheTTL,
   Controller,
   Get,
   HttpException,
@@ -15,7 +14,6 @@ import { GetClassDto } from './dto/get-class.dto';
 
 @ApiTags('classes')
 @UseInterceptors(CacheInterceptor)
-@CacheTTL(30)
 @Controller('classes')
 export class ClassesController {
   constructor(private readonly untisService: UntisService) {}
@@ -35,10 +33,10 @@ export class ClassesController {
     type: GetClassDto,
   })
   @ApiNotFoundResponse({ description: 'The requested class was not found.' })
-  @Get(':id')
-  async getClass(@Param('id', ParseIntPipe) id: number) {
+  @Get(':classId')
+  async getClass(@Param('classId', ParseIntPipe) classId: number) {
     const targetClass = (await this.untisService.fetchClasses()).find(
-      (c) => c.id === id,
+      (c) => c.id === classId,
     );
 
     if (!targetClass)
