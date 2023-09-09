@@ -47,6 +47,7 @@ export class LessonsController {
 
   @ApiQuery({ name: 'includedSubjects', type: [Number], required: false })
   @ApiQuery({ name: 'excludedSubjects', type: [Number], required: false })
+  @ApiQuery({ name: 'alarms', type: [Number], required: false })
   @Get(':classId/ics')
   async getICSForClass(
     @Param('classId', ParseIntPipe) classId: number,
@@ -60,6 +61,8 @@ export class LessonsController {
       new ParseArrayPipe({ items: Number, optional: true }),
     )
     excludedSubjects?: number[],
+    @Query('alarms', new ParseArrayPipe({ items: Number, optional: true }))
+    alarms?: number[],
   ) {
     const lessons = await this.untisService.fetchTimetable(14, 31, classId);
     if (!lessons)
@@ -71,6 +74,7 @@ export class LessonsController {
     return this.lessonsService.convertToEvents(lessons, {
       includedSubjects,
       excludedSubjects,
+      alarms,
     });
   }
 }

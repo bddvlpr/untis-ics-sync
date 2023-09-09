@@ -1,10 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { createEvents, EventAttributes } from 'ics';
+import { duration } from 'moment';
 import { Lesson, WebUntis } from 'webuntis';
 
 export interface LessonsOptions {
   includedSubjects?: number[];
   excludedSubjects?: number[];
+  alarms: number[];
 }
 
 @Injectable()
@@ -23,9 +25,9 @@ export class LessonsService {
 
   async convertToEvents(
     lessons: Lesson[],
-    { includedSubjects, excludedSubjects }: LessonsOptions,
+    { includedSubjects, excludedSubjects, alarms }: LessonsOptions,
   ) {
-    const events = createEvents(
+    const { error, value } = createEvents(
       lessons
         .reduce((acc, curr) => {
           const last = acc[acc.length - 1];
@@ -54,7 +56,25 @@ export class LessonsService {
         .map(
           (l) =>
             ({
-              title: l.su.map((s) => s.longname).join(','),
+              uid: l.id.toString(),
+              title: l.lstext
+                ? `${l.lstext} (${l.su.map((s) => s.longname).join(', ')})`
+                : l.su.map((s) => s.longname).join(', '),
+
+              description: `Teacher(s): ${l.te
+                .map((t) => t.longname)
+                .join(', ')}\nSubject(s): ${l.su.map(
+                (s) => `${s.longname} (${s.id})`,
+              )}\nClass(es): ${l.kl.map((k) => k.longname).join(', ')}`,
+              location: l.ro.map((r) => r.longname).join(', '),
+
+              alarms: alarms?.map((minutes) => ({
+                trigger: {
+                  minutes,
+                  before: true,
+                },
+                action: 'display',
+              })),
 
               start: this.convertDate(l.start),
               startInputType: 'local',
@@ -67,11 +87,11 @@ export class LessonsService {
         ),
     );
 
-    if (events.error) {
-      this.logger.error(`Failed creating events: ${events.error}.`);
+    if (error) {
+      this.logger.error(`Failed creating events: ${error.message}.`);
       return null;
     }
 
-    return events.value;
+    return value;
   }
 }
