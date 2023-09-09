@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { createEvents, EventAttributes } from 'ics';
-import { duration } from 'moment';
 import { Lesson, WebUntis } from 'webuntis';
 
 export interface LessonsOptions {
