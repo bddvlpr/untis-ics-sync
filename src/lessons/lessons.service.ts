@@ -66,7 +66,7 @@ export class LessonsService {
                 .join(', ')}\nSubject(s): ${l.su.map(
                 (s) => `${s.longname} (${s.id})`,
               )}\nClass(es): ${l.kl.map((k) => k.longname).join(', ')}`,
-              location: l.ro.map((r) => r.longname).join(', '),
+              location: l.ro.map((r) => r.longname).join(',\n'),
 
               alarms: alarms?.map((minutes) => ({
                 trigger: {
