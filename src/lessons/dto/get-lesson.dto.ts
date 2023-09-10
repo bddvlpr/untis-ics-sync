@@ -1,68 +1,66 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class Metadata {
-  @ApiProperty()
+  @ApiProperty({ description: "The metadata's identification number." })
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({ description: "The metadata's name value." })
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: "The metadata's long name value." })
   longname: string;
 }
 
 export class GetLessonDto {
-  @ApiProperty()
+  @ApiProperty({ description: "The lesson's identification number." })
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({
+    description:
+      "The lesson's set date. Use this in combination with *startTime* and *endTime*.",
+  })
   date: Date;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: "The lesson's starting time in WebUntis formatting.",
+  })
   startTime: number;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: "The lesson's ending time in WebUntis formatting.",
+  })
   endTime: number;
 
-  @ApiProperty({ type: [Metadata] })
+  @ApiProperty({
+    description: "The lesson's attending classes.",
+    type: [Metadata],
+  })
   kl: Metadata[];
 
-  @ApiProperty({ type: [Metadata] })
+  @ApiProperty({ description: "The lesson's teachers.", type: [Metadata] })
   te: Metadata[];
 
-  @ApiProperty({ type: [Metadata] })
+  @ApiProperty({ description: "The lesson's subjects.", type: [Metadata] })
   su: Metadata[];
 
-  @ApiProperty({ type: [Metadata] })
+  @ApiProperty({ description: "The lesson's rooms.", type: [Metadata] })
   ro: Metadata[];
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ description: "The lesson's optional meta text." })
   lstext?: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description:
+      "The lesson's shared identification number. Used for repeating classes.",
+  })
   lsnumber: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ description: "The lesson's type." })
   activityType?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ description: "The lesson's state." })
   code?: 'cancelled' | 'irregular';
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ description: "The lesson's optional information." })
   info?: string;
-
-  @ApiPropertyOptional()
-  substText?: string;
-
-  @ApiPropertyOptional()
-  statflags?: string;
-
-  @ApiPropertyOptional()
-  sg?: string;
-
-  @ApiPropertyOptional()
-  bkRemark?: string;
-
-  @ApiPropertyOptional()
-  bkText?: string;
 }

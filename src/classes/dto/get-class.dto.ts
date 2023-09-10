@@ -1,21 +1,25 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class GetClassDto {
-  @ApiProperty()
+  @ApiProperty({ description: "The class's identification number." })
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({ description: "The class's short name." })
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: "The class's longer, more descriptive, name." })
   longName: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: "The class's department identification number." })
   did: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Optional forced foreground color representing the class.',
+  })
   foreColor?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Optional forced background color representing the class.',
+  })
   backColor?: string;
 }
