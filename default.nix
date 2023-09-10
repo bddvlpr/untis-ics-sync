@@ -1,14 +1,14 @@
-{pkgs ? import <nixpkgs> {}, ...}:
+{pkgs ? import <nixpkgs> {}}:
 with pkgs;
   mkYarnPackage rec {
-    name = "untis-ics-sync";
-    version = "0.4.1";
+    pname = "untis-ics-sync";
+    version = "0.5.0";
 
     src = ./.;
 
     offlineCache = fetchYarnDeps {
       yarnLock = src + "/yarn.lock";
-      sha256 = "1rws4lcyr32jmk5glvn42wq2p2scply2zsyy4r4bgl0mz59zz3i4";
+      hash = "sha256-HZ+8N/IWux/WsJrcTiTB3ajfwr+s3vcQPrunLqUoaXk=";
     };
 
     packageJSON = ./package.json;
