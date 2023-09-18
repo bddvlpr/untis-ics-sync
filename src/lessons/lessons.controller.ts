@@ -2,6 +2,7 @@ import {
   Controller,
   DefaultValuePipe,
   Get,
+  Header,
   HttpException,
   HttpStatus,
   Param,
@@ -50,6 +51,7 @@ export class LessonsController {
   @ApiQuery({ name: 'excludedSubjects', type: [Number], required: false })
   @ApiQuery({ name: 'alarms', type: [Number], required: false })
   @ApiQuery({ name: 'offset', type: Number, required: false })
+  @Header('Content-Type', 'text/calendar')
   @Get(':classId/ics')
   async getICSForClass(
     @Param('classId', ParseIntPipe) classId: number,
