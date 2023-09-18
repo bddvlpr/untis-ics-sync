@@ -5,26 +5,27 @@ import { Lesson, WebUntis } from 'webuntis';
 export interface LessonsOptions {
   includedSubjects?: number[];
   excludedSubjects?: number[];
-  alarms: number[];
+  alarms?: number[];
+  offset?: number;
 }
 
 @Injectable()
 export class LessonsService {
   private readonly logger: Logger = new Logger(LessonsService.name);
 
-  convertDate(date: Date) {
+  convertDate(date: Date, offset = 0) {
     return [
       date.getFullYear(),
       date.getMonth() + 1,
       date.getDate(),
-      date.getHours(),
+      date.getHours() + offset,
       date.getMinutes(),
     ];
   }
 
   async convertToEvents(
     lessons: Lesson[],
-    { includedSubjects, excludedSubjects, alarms }: LessonsOptions,
+    { includedSubjects, excludedSubjects, alarms, offset }: LessonsOptions,
   ) {
     const { error, value } = createEvents(
       lessons
@@ -75,11 +76,11 @@ export class LessonsService {
                 action: 'display',
               })),
 
-              start: this.convertDate(l.start),
+              start: this.convertDate(l.start, offset),
               startInputType: 'local',
               startOutputType: 'utc',
 
-              end: this.convertDate(l.end),
+              end: this.convertDate(l.end, offset),
               endInputType: 'local',
               endOutputType: 'utc',
             } as EventAttributes),

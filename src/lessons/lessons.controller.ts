@@ -1,5 +1,6 @@
 import {
   Controller,
+  DefaultValuePipe,
   Get,
   HttpException,
   HttpStatus,
@@ -48,6 +49,7 @@ export class LessonsController {
   @ApiQuery({ name: 'includedSubjects', type: [Number], required: false })
   @ApiQuery({ name: 'excludedSubjects', type: [Number], required: false })
   @ApiQuery({ name: 'alarms', type: [Number], required: false })
+  @ApiQuery({ name: 'offset', type: Number, required: false })
   @Get(':classId/ics')
   async getICSForClass(
     @Param('classId', ParseIntPipe) classId: number,
@@ -63,6 +65,8 @@ export class LessonsController {
     excludedSubjects?: number[],
     @Query('alarms', new ParseArrayPipe({ items: Number, optional: true }))
     alarms?: number[],
+    @Query('offset', new DefaultValuePipe(0), ParseIntPipe)
+    offset?: number,
   ) {
     const lessons = await this.untisService.fetchTimetable(14, 31, classId);
     if (!lessons)
@@ -75,6 +79,7 @@ export class LessonsController {
       includedSubjects,
       excludedSubjects,
       alarms,
+      offset,
     });
   }
 }
