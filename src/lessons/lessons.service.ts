@@ -77,11 +77,11 @@ export class LessonsService {
 
               start: this.convertDate(l.start),
               startInputType: 'local',
-              startOutputType: 'local',
+              startOutputType: 'utc',
 
               end: this.convertDate(l.end),
               endInputType: 'local',
-              endOutputType: 'local',
+              endOutputType: 'utc',
             } as EventAttributes),
         ),
     );
