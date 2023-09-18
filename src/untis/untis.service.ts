@@ -3,12 +3,20 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cache } from 'cache-manager';
 import * as moment from 'moment';
-import { Klasse, Lesson, SchoolYear, Subject, WebUntis } from 'webuntis';
+import {
+  Holiday,
+  Klasse,
+  Lesson,
+  SchoolYear,
+  Subject,
+  WebUntis,
+} from 'webuntis';
 
 const CACHE_SCHOOLYEAR = 'SCHOOLYEAR',
   CACHE_CLASSES = 'CLASSES',
   CACHE_SUBJECTS = 'SUBJECTS',
-  CACHE_TIMETABLE = 'TIMETABLE';
+  CACHE_TIMETABLE = 'TIMETABLE',
+  CACHE_HOLIDAYS = 'HOLIDAYS';
 
 @Injectable()
 export class UntisService {
@@ -78,6 +86,15 @@ export class UntisService {
 
       this.logger.log('Fetching subjects...');
       return this.client.getSubjects(false);
+    });
+  }
+
+  async fetchHolidays() {
+    return await this.retrieveCache<Holiday[]>(CACHE_HOLIDAYS, async () => {
+      await this.validateSession();
+
+      this.logger.log('Fetching holidays...');
+      return this.client.getHolidays(false);
     });
   }
 
