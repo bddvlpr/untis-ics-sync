@@ -111,31 +111,22 @@ export class UntisService {
         const currentMoment = moment().subtract(before, 'days');
         const endMoment = moment().add(after, 'days');
 
-        let lessonsRange = await this.fetchTimetableRange(
-          currentMoment.toDate(),
-          endMoment.toDate(),
-          classId,
-        ).catch(() => null);
-
-        if (!lessonsRange) {
-          this.logger.warn(
-            'Range fetch failed, falling back on individual date fetch.',
+        const promises = [];
+        while (currentMoment.isBefore(endMoment)) {
+          promises.push(
+            this.fetchTimetableFor(currentMoment.toDate(), classId),
           );
-          const promises = [];
-          while (currentMoment.isBefore(endMoment)) {
-            promises.push(
-              this.fetchTimetableFor(currentMoment.toDate(), classId),
-            );
-            currentMoment.add(1, 'days');
-          }
-          lessonsRange = (await Promise.all(promises)).filter((l) => l).flat();
+          currentMoment.add(1, 'days');
         }
-        return lessonsRange;
+        return (await Promise.all(promises)).filter((l) => l).flat();
       },
       60_000,
     );
   }
 
+  /**
+   * @deprecated
+   */
   private fetchTimetableRange(
     start: Date,
     end: Date,
