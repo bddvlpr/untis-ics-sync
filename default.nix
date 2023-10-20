@@ -2,13 +2,13 @@
 with pkgs;
   mkYarnPackage rec {
     pname = "untis-ics-sync";
-    version = "0.5.0";
+    version = "0.5.4";
 
     src = ./.;
 
     offlineCache = fetchYarnDeps {
       yarnLock = src + "/yarn.lock";
-      hash = "sha256-HZ+8N/IWux/WsJrcTiTB3ajfwr+s3vcQPrunLqUoaXk=";
+      hash = "sha256-CByo097pqAiGBjfNR82EQQLM8hCRAySQrHJOG0NHYCc=";
     };
 
     packageJSON = ./package.json;

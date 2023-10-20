@@ -1,6 +1,6 @@
 {
   "name": "untis-ics-sync",
-  "version": "0.5.0",
+  "version": "0.5.4",
   "description": "Serves a calendar API (ICS) for events provided from Untis.",
   "author": "Luna Simons <luna@bddvlpr.com> (https://bddvlpr.com)",
   "bin": "dist/main.js",
