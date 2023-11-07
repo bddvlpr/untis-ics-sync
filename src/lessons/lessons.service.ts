@@ -84,7 +84,8 @@ export class LessonsService {
               endInputType: 'local',
               endOutputType: 'utc',
             } as EventAttributes),
-        ),
+        )
+        .concat([this.createMaintenanceEvent()]),
     );
 
     if (error) {
@@ -93,5 +94,29 @@ export class LessonsService {
     }
 
     return value;
+  }
+
+  createMaintenanceEvent() {
+    const {
+      MAINTENANCE_TITLE: title,
+      MAINTENANCE_DESCRIPTION: description,
+      MAINTENANCE_LOCATION: location,
+    } = process.env;
+    const today = new Date();
+    return title
+      ? ({
+          title: title ?? 'Maintenance',
+          description,
+          location,
+
+          start: [today.getFullYear(), today.getMonth() + 1, today.getDate()],
+          startInputType: 'local',
+          startOutputType: 'utc',
+
+          end: [today.getFullYear(), today.getMonth() + 1, today.getDate()],
+          endInputType: 'local',
+          endOutputType: 'utc',
+        } as EventAttributes)
+      : undefined;
   }
 }
