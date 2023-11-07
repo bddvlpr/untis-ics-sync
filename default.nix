@@ -2,7 +2,7 @@
 with pkgs;
   mkYarnPackage rec {
     pname = "untis-ics-sync";
-    version = "0.5.4";
+    version = "0.5.5";
 
     src = ./.;
 
