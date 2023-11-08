@@ -85,7 +85,8 @@ export class LessonsService {
               endOutputType: 'utc',
             } as EventAttributes),
         )
-        .concat([this.createMaintenanceEvent()]),
+        .concat([this.createMaintenanceEvent()])
+        .filter((e) => e),
     );
 
     if (error) {
