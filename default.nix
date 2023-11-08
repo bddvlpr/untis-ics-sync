@@ -8,7 +8,7 @@ with pkgs;
 
     offlineCache = fetchYarnDeps {
       yarnLock = src + "/yarn.lock";
-      hash = "sha256-CByo097pqAiGBjfNR82EQQLM8hCRAySQrHJOG0NHYCc=";
+      hash = "sha256-NHghkf5Nziyz3M7E4941sV5JFqY7RYMTlZqYsQPZLpU=";
     };
 
     packageJSON = ./package.json;
