@@ -10,6 +10,7 @@ import {
   ParseIntPipe,
   Query,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -24,6 +25,7 @@ import { LessonsService } from './lessons.service';
 @Controller('lessons')
 export class LessonsController {
   constructor(
+    private readonly configService: ConfigService,
     private readonly untisService: UntisService,
     private readonly lessonsService: LessonsService,
   ) {}
@@ -37,7 +39,11 @@ export class LessonsController {
   })
   @Get(':classId')
   async getLessonsForClass(@Param('classId', ParseIntPipe) classId: number) {
-    const lessons = await this.untisService.fetchTimetable(14, 31, classId);
+    const lessons = await this.untisService.fetchTimetable(
+      this.configService.get<number>('LESSONS_TIMETABLE_BEFORE', 31),
+      this.configService.get<number>('LESSONS_TIMETABLE_AFTER', 31),
+      classId,
+    );
     if (!lessons)
       throw new HttpException(
         'No lessons found, does class exist?',
@@ -70,7 +76,11 @@ export class LessonsController {
     @Query('offset', new DefaultValuePipe(0), ParseIntPipe)
     offset?: number,
   ) {
-    const lessons = await this.untisService.fetchTimetable(14, 31, classId);
+    const lessons = await this.untisService.fetchTimetable(
+      this.configService.get<number>('LESSONS_TIMETABLE_BEFORE', 31),
+      this.configService.get<number>('LESSONS_TIMETABLE_AFTER', 31),
+      classId,
+    );
     if (!lessons)
       throw new HttpException(
         'No lessons found, does class exist?',

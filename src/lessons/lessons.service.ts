@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { createEvents, EventAttributes } from 'ics';
 import { Lesson, WebUntis } from 'webuntis';
 
@@ -12,6 +13,8 @@ export interface LessonsOptions {
 @Injectable()
 export class LessonsService {
   private readonly logger: Logger = new Logger(LessonsService.name);
+
+  constructor(private readonly configService: ConfigService) {}
 
   convertDate(date: Date, offset = 0) {
     return [
@@ -98,11 +101,18 @@ export class LessonsService {
   }
 
   createMaintenanceEvent() {
-    const {
-      MAINTENANCE_TITLE: title,
-      MAINTENANCE_DESCRIPTION: description,
-      MAINTENANCE_LOCATION: location,
-    } = process.env;
+    const title = this.configService.get<string>(
+        'MAINTENANCE_TITLE',
+        undefined,
+      ),
+      description = this.configService.get<string>(
+        'MAINTENANCE_DESCRIPTION',
+        undefined,
+      ),
+      location = this.configService.get<string>(
+        'MAINTENANCE_LOCATION',
+        undefined,
+      );
     const today = new Date();
     return title
       ? ({
