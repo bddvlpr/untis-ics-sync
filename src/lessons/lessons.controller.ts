@@ -1,3 +1,4 @@
+import { InjectQueue } from '@nestjs/bull';
 import {
   Controller,
   DefaultValuePipe,
@@ -17,17 +18,16 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { UntisService } from 'src/untis/untis.service';
+import { Queue } from 'bull';
 import { GetLessonDto } from './dto/get-lesson.dto';
-import { LessonsService } from './lessons.service';
+import { FetchData, FetchIcsData } from './lessons.processor';
 
 @ApiTags('lessons')
 @Controller('lessons')
 export class LessonsController {
   constructor(
     private readonly configService: ConfigService,
-    private readonly untisService: UntisService,
-    private readonly lessonsService: LessonsService,
+    @InjectQueue('lessons-queue') private readonly lessonsQueue: Queue,
   ) {}
 
   @ApiOkResponse({
@@ -39,11 +39,13 @@ export class LessonsController {
   })
   @Get(':classId')
   async getLessonsForClass(@Param('classId', ParseIntPipe) classId: number) {
-    const lessons = await this.untisService.fetchTimetable(
-      this.configService.get<number>('LESSONS_TIMETABLE_BEFORE', 7),
-      this.configService.get<number>('LESSONS_TIMETABLE_AFTER', 7),
+    const job = this.lessonsQueue.add('fetch', {
+      before: this.configService.get<number>('LESSONS_TIMETABLE_BEFORE', 7),
+      after: this.configService.get<number>('LESSONS_TIMETABLE_AFTER', 14),
       classId,
-    );
+    } as FetchData);
+
+    const lessons = (await job).finished();
     if (!lessons)
       throw new HttpException(
         'No lessons found, does class exist?',
@@ -76,22 +78,23 @@ export class LessonsController {
     @Query('offset', new DefaultValuePipe(0), ParseIntPipe)
     offset?: number,
   ) {
-    const lessons = await this.untisService.fetchTimetable(
-      this.configService.get<number>('LESSONS_TIMETABLE_BEFORE', 7),
-      this.configService.get<number>('LESSONS_TIMETABLE_AFTER', 7),
+    const job = this.lessonsQueue.add('fetch-ics', {
+      before: this.configService.get<number>('LESSONS_TIMETABLE_BEFORE', 7),
+      after: this.configService.get<number>('LESSONS_TIMETABLE_AFTER', 14),
       classId,
-    );
-    if (!lessons)
+      includedSubjects,
+      excludedSubjects,
+      alarms,
+      offset,
+    } as FetchIcsData);
+
+    const ics = await (await job).finished();
+    if (!ics)
       throw new HttpException(
         'No lessons found, does class exist?',
         HttpStatus.NOT_FOUND,
       );
 
-    return this.lessonsService.convertToEvents(lessons, {
-      includedSubjects,
-      excludedSubjects,
-      alarms,
-      offset,
-    });
+    return ics;
   }
 }
