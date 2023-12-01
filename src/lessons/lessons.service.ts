@@ -61,7 +61,7 @@ export class LessonsService {
             ({
               uid: l.id.toString(),
               title: l.lstext
-                ? `${l.lstext} (${l.su.map((s) => s.longname).join(', ')})`
+                ? `${l.su.map((s) => s.longname).join(', ')} (${l.lstext})`
                 : l.su.map((s) => s.longname).join(', '),
 
               description: `Teacher(s): ${l.te
