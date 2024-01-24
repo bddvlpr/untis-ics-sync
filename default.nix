@@ -1,23 +1,40 @@
-{pkgs ? import <nixpkgs> {}}:
-with pkgs;
-  mkYarnPackage rec {
-    pname = "untis-ics-sync";
-    version = "0.5.10";
+{
+  mkYarnPackage,
+  fetchYarnDeps,
+  makeWrapper,
+  lib,
+  nodejs,
+}:
+mkYarnPackage rec {
+  pname = "untis-ics-sync";
+  version = "0.6.0";
 
-    src = ./.;
+  src = ./.;
 
-    offlineCache = fetchYarnDeps {
-      yarnLock = src + "/yarn.lock";
-      hash = "sha256-NHghkf5Nziyz3M7E4941sV5JFqY7RYMTlZqYsQPZLpU=";
-    };
+  offlineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    hash = "sha256-NHghkf5Nziyz3M7E4941sV5JFqY7RYMTlZqYsQPZLpU=";
+  };
 
-    packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
+  nativeBuildInputs = [makeWrapper];
 
-    buildPhase = ''
-      export HOME=$(mktemp -d)
-      yarn --offline build
-    '';
+  packageJSON = ./package.json;
+  yarnLock = ./yarn.lock;
 
-    distPhase = "true";
-  }
+  buildPhase = ''
+    yarn --offline run build
+  '';
+
+  postInstall = ''
+    makeWrapper ${lib.getExe nodejs} "$out/bin/untis-ics-sync" \
+      --add-flags "$out/libexec/untis-ics-sync/deps/untis-ics-sync/dist/main.js"
+  '';
+
+  meta = with lib; {
+    description = "Serves a calendar API (ICS) for events provided from Untis";
+    homepage = "https://github.com/bddvlpr/untis-ics-sync";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [bddvlpr];
+    mainProgram = "untis-ics-sync";
+  };
+}
