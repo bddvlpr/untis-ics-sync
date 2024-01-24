@@ -1,33 +1,40 @@
 {
   inputs = {
-    nixpkgs.url = "nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = {nixpkgs, ...}: let
-    forAllSystems = nixpkgs.lib.genAttrs [
-      "aarch64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-      "x86_64-linux"
-    ];
-  in {
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+  outputs = inputs @ {
+    self,
+    flake-parts,
+    ...
+  }:
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = [
+        "aarch64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
+        "x86_64-linux"
+      ];
 
-    packages = forAllSystems (
-      system: let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in {
-        default = import ./default.nix {inherit pkgs;};
-      }
-    );
+      perSystem = {pkgs, ...}: {
+        formatter = pkgs.alejandra;
 
-    devShell = forAllSystems (
-      system: let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in
-        pkgs.mkShell {
+        packages = rec {
+          default = pkgs.callPackage ./default.nix {};
+          untis-ics-sync = default;
+        };
+
+        devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [nodejs yarn nest-cli];
-        }
-    );
-  };
+        };
+      };
+
+      flake = {
+        nixosModules = rec {
+          default = import ./module.nix self;
+          untis-ics-sync = default;
+        };
+      };
+    };
 }
