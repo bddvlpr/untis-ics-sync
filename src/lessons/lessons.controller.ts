@@ -40,8 +40,8 @@ export class LessonsController {
   @Get(':classId')
   async getLessonsForClass(@Param('classId', ParseIntPipe) classId: number) {
     const lessons = await this.untisService.fetchTimetable(
-      this.configService.get<number>('LESSONS_TIMETABLE_BEFORE', 31),
-      this.configService.get<number>('LESSONS_TIMETABLE_AFTER', 31),
+      this.configService.get<number>('LESSONS_TIMETABLE_BEFORE', 7),
+      this.configService.get<number>('LESSONS_TIMETABLE_AFTER', 7),
       classId,
     );
     if (!lessons)
@@ -77,8 +77,8 @@ export class LessonsController {
     offset?: number,
   ) {
     const lessons = await this.untisService.fetchTimetable(
-      this.configService.get<number>('LESSONS_TIMETABLE_BEFORE', 31),
-      this.configService.get<number>('LESSONS_TIMETABLE_AFTER', 31),
+      this.configService.get<number>('LESSONS_TIMETABLE_BEFORE', 7),
+      this.configService.get<number>('LESSONS_TIMETABLE_AFTER', 7),
       classId,
     );
     if (!lessons)

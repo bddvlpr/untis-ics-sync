@@ -108,25 +108,16 @@ export class UntisService {
       async () => {
         await this.validateSession();
 
-        const currentMoment = moment().subtract(before, 'days');
-        const endMoment = moment().add(after, 'days');
-
-        const promises = [];
-        while (currentMoment.isBefore(endMoment)) {
-          promises.push(
-            this.fetchTimetableFor(currentMoment.toDate(), classId),
-          );
-          currentMoment.add(1, 'days');
-        }
-        return (await Promise.all(promises)).filter((l) => l).flat();
+        return await this.fetchTimetableRange(
+          moment().subtract(before, 'days').toDate(),
+          moment().add(after, 'days').toDate(),
+          classId,
+        );
       },
       60_000,
     );
   }
 
-  /**
-   * @deprecated
-   */
   private fetchTimetableRange(
     start: Date,
     end: Date,
@@ -139,6 +130,9 @@ export class UntisService {
     return this.client.getTimetableForRange(start, end, classId, type);
   }
 
+  /**
+   * @deprecated
+   */
   private fetchTimetableFor(date: Date, classId: number, type = 1) {
     this.logger.log(`Fetching timetable for ${date.toLocaleDateString()}...`);
     return this.client
