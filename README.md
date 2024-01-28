@@ -1,4 +1,4 @@
-# untis-ics-sync
+# ⏰ untis-ics-sync
 
 [![Node CI](https://github.com/bddvlpr/untis-ics-sync/actions/workflows/node-ci.yaml/badge.svg)](https://github.com/bddvlpr/untis-ics-sync/actions/workflows/node-ci.yaml) [![Docker CD](https://github.com/bddvlpr/untis-ics-sync/actions/workflows/docker-cd.yaml/badge.svg)](https://github.com/bddvlpr/untis-ics-sync/actions/workflows/docker-cd.yaml)
 
@@ -32,7 +32,7 @@ Firstly add this repository to your flake's inputs.
 }
 ```
 
-Secondly, enable the service. Please **DO NOT** use a writeText derivative as this will add your credentials to the Nix store. Use agenix or nix-sops. A local Redis service will automatically be started.
+Secondly, enable the service. Please **DO NOT** use a writeText derivation as this will add your credentials to the Nix store. Use agenix or nix-sops. A local Redis service will automatically be started.
 ```nix
 {
   inputs,
