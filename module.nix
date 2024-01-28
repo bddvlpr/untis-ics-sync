@@ -40,10 +40,18 @@ in {
       serviceConfig = {
         Restart = "on-failure";
         ExecStart = "${lib.getExe cfg.package}";
+        Environment = [
+          "BULL_REDIS_PATH=${config.services.redis.servers.untis-ics-sync.unixSocket}"
+        ];
         EnvironmentFile = cfg.envFile;
         User = cfg.user;
         Group = cfg.group;
       };
+    };
+
+    services.redis.servers.untis-ics-sync = {
+      enable = true;
+      user = cfg.user;
     };
 
     users = {
