@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  server:
+    image: bddvlpr/untis-ics-sync:latest
+    restart: unless-stopped
+    environment:
+      UNTIS_SCHOOLNAME:
+      UNTIS_USERNAME:
+      UNTIS_PASSWORD:
+      UNTIS_BASEURL:
+
+      BULL_REDIS_HOST: redis
+      BULL_REDIS_PORT: 6379
+    ports:
+      - 3000:3000
+    depends_on:
+      - redis
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    command: redis-server
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:
