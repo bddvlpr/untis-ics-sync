@@ -11,7 +11,7 @@ Some schools, universities, or workspaces do not enable the iCalendar API that U
 Simply clone the repository and cd into it using `git clone https://github.com/bddvlpr/untis-ics-sync && cd untis-ics-sync`.
 If you're planning on using Docker, you could use the [bddvlpr/untis-ics-sync](https://hub.docker.com/r/bddvlpr/untis-ics-sync/) image from Docker Hub instead of the git repository.
 
-## Redis
+### Redis
 
 Version 0.7.0 and above require a redis server to be supplied in environment variables for queue processing. Either externally provide one, or define one in a Docker compose environment.
 
