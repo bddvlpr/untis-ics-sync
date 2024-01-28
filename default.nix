@@ -7,13 +7,13 @@
 }:
 mkYarnPackage rec {
   pname = "untis-ics-sync";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = ./.;
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-mToEmc4cNd2fsyT/DUkzMiO4BYUDw6aexbcXOVfB2ds=";
+    hash = "sha256-D2gX6cOfVbUdSmwAz8mxf+D3TvHfYOHpT0ar1nKFBF0=";
   };
 
   nativeBuildInputs = [makeWrapper];
@@ -29,8 +29,6 @@ mkYarnPackage rec {
     makeWrapper ${lib.getExe nodejs} "$out/bin/untis-ics-sync" \
       --add-flags "$out/libexec/untis-ics-sync/deps/untis-ics-sync/dist/main.js"
   '';
-
-  dontStrip = true;
 
   meta = with lib; {
     description = "Serves a calendar API (ICS) for events provided from Untis";
