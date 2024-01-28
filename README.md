@@ -4,6 +4,9 @@
 
 Serves a calendar API (ICS) for events provided from Untis.
 
+![Banner](.github/assets/banner.jpg)
+
+
 ## Use case
 
 Some schools, universities, or workspaces do not enable the iCalendar API that Untis provides by default. Due to this limitation, I've written my implementation to dynamically sync class schedules to my agenda.
