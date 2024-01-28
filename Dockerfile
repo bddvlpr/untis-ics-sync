@@ -1,4 +1,4 @@
-FROM node:18 AS build-env
+FROM node:20 AS build-env
 
 WORKDIR /app
 
@@ -9,7 +9,7 @@ RUN yarn install --frozen-lockfile --network-timeout 1000000
 COPY . .
 RUN yarn build
 
-FROM node:18 AS runtime-env
+FROM node:20 AS runtime-env
 
 WORKDIR /app
 
