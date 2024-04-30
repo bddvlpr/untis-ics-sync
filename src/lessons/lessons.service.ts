@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createEvents, EventAttributes } from 'ics';
-import { Lesson, WebUntis } from 'webuntis';
+import { Lesson, ShortData, WebUntis } from 'webuntis';
 
 export interface LessonsOptions {
   includedSubjects?: number[];
@@ -60,16 +60,14 @@ export class LessonsService {
           (l) =>
             ({
               uid: l.id.toString(),
-              title: l.lstext
-                ? `${l.su.map((s) => s.longname).join(', ')} (${l.lstext})`
-                : l.su.map((s) => s.longname).join(', '),
+              title:
+                (l.lstext
+                  ? `${l.su?.map((s) => s.longname).join(', ')} (${l.lstext})`
+                  : l.su?.map((s) => s.longname).join(', ')) ??
+                'Unnamed lesson',
 
-              description: `Teacher(s): ${l.te
-                .map((t) => t.longname)
-                .join(', ')}\nSubject(s): ${l.su.map(
-                (s) => `${s.longname} (${s.id})`,
-              )}\nClass(es): ${l.kl.map((k) => k.longname).join(', ')}`,
-              location: l.ro.map((r) => r.longname).join('\n'),
+              description: this.buildDescription(l),
+              location: this.buildLocation(l),
 
               alarms: alarms?.map((minutes) => ({
                 trigger: {
@@ -129,5 +127,35 @@ export class LessonsService {
           endOutputType: 'utc',
         } as EventAttributes)
       : undefined;
+  }
+
+  buildDescription({
+    te,
+    su,
+    kl,
+    ro,
+  }: {
+    te: ShortData[];
+    su?: ShortData[];
+    kl: ShortData[];
+    ro: ShortData[];
+  }) {
+    let out = '';
+
+    if (te?.length)
+      out += `Teacher(s): ${te.map((t) => t.longname).join(', ')}\n`;
+    if (su?.length)
+      out += `Subject(s): ${su
+        .map((s) => `${s.longname} (${s.id})`)
+        .join(', ')}\n`;
+    if (kl?.length)
+      out += `Class(es): ${kl.map((k) => k.longname).join(', ')}\n`;
+    if (ro?.length) out += `Room(s): ${ro.map((r) => r.longname).join(', ')}\n`;
+
+    return out;
+  }
+
+  buildLocation({ ro }: { ro: ShortData[] }) {
+    return ro.map((r) => r.longname).join('\n');
   }
 }
