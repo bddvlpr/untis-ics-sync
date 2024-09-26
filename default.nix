@@ -7,13 +7,13 @@
 }:
 mkYarnPackage rec {
   pname = "untis-ics-sync";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = ./.;
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-M8J8Ppr2iRDRwq8g+rYi4J4DdHCRYxXbMBZpF7tjj3c=";
+    hash = "sha256-SePDL1jsGL+HPEMFC0T8a7n90jn02Ef3AeBmPmLt8Uo=";
   };
 
   nativeBuildInputs = [makeWrapper];
