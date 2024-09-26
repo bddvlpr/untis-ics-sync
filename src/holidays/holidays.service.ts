@@ -31,7 +31,7 @@ export class HolidaysService {
               end: [h.end.getFullYear(), h.end.getMonth() + 1, h.end.getDate()],
               endInputType: 'local',
               endOutputType: 'utc',
-            } as EventAttributes),
+            }) as EventAttributes,
         ),
     );
 

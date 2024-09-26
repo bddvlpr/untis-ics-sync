@@ -44,8 +44,8 @@ export class LessonsService {
           includedSubjects
             ? l.su.find((s) => includedSubjects.includes(s.id))
             : excludedSubjects
-            ? !l.su.find((s) => excludedSubjects.includes(s.id))
-            : true,
+              ? !l.su.find((s) => excludedSubjects.includes(s.id))
+              : true,
         )
         .map((l) => ({
           ...l,
@@ -84,7 +84,7 @@ export class LessonsService {
               end: this.convertDate(l.end, offset),
               endInputType: 'local',
               endOutputType: 'utc',
-            } as EventAttributes),
+            }) as EventAttributes,
         )
         .concat([this.createMaintenanceEvent()])
         .filter((e) => e),
