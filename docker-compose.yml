@@ -6,9 +6,9 @@ services:
     restart: unless-stopped
     environment:
       UNTIS_SCHOOLNAME:
-      UNTIS_USERNAME:
-      UNTIS_PASSWORD:
-      UNTIS_BASEURL:
+      UNTIS_USERNAME: luka.vrpolja
+      UNTIS_PASSWORD: Murter2019
+      UNTIS_BASEURL: https://kephiso.webuntis.com/
 
       BULL_REDIS_HOST: redis
       BULL_REDIS_PORT: 6379
