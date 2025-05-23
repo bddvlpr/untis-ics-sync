@@ -44,7 +44,7 @@ export class LessonsService {
           if (
             last &&
             last.lsnumber === curr.lsnumber &&
-            last.date === curr.date // Only merge on same date
+            last.date === curr.date
           ) {
             last.endTime = curr.endTime;
             return acc;
