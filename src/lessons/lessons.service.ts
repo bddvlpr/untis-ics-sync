@@ -32,9 +32,20 @@ export class LessonsService {
   ) {
     const { error, value } = createEvents(
       lessons
+        .sort((a, b) =>
+          a.date !== b.date
+            ? a.date - b.date
+            : a.startTime !== b.startTime
+              ? a.startTime - b.startTime
+              : a.lsnumber - b.lsnumber,
+        )
         .reduce((acc, curr) => {
           const last = acc[acc.length - 1];
-          if (last && last.lsnumber === curr.lsnumber) {
+          if (
+            last &&
+            last.lsnumber === curr.lsnumber &&
+            last.date === curr.date
+          ) {
             last.endTime = curr.endTime;
             return acc;
           }
