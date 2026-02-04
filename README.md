@@ -11,6 +11,30 @@ Serves a calendar API (ICS) for events provided from Untis.
 
 Some schools, universities, or workspaces do not enable the iCalendar API that Untis provides by default. Due to this limitation, I've written my implementation to dynamically sync class schedules to my agenda.
 
+## Usage
+
+See [#installation](#installation) how to set up. After running the container, the API will be available (by default on port 3000).
+
+### API Documentation
+Interactive API docs: `http://localhost:3000/swagger`
+
+### Endpoints
+- `GET /classes` - List all classes
+- `GET /classes/:classId` - Get specific class
+- `GET /subjects` - List all subjects  
+- `GET /lessons/:classId` - Get lessons (JSON)
+- `GET /lessons/:classId/ics` - Get ICS calendar file
+  - Query params: `includedSubjects`, `excludedSubjects`, `alarms`, `offset`
+- `GET /holidays` - Get holidays (ICS)
+
+### Example
+Get ICS calendar for class ID 123:
+```bash
+curl http://localhost:3000/lessons/123/ics > calendar.ics
+```
+
+Subscribe in your calendar app using: `http://your-server:3000/lessons/{classId}/ics`
+
 ## Installation
 
 ### Using Docker
